@@ -3,206 +3,310 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
 <title>Study 5-Step Tracker</title>
 
 <style>
-  *{box-sizing:border-box}
-
-  body{
-    margin:0;
-    font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-    background:linear-gradient(135deg,#f6f8ff,#eef7ff);
-    color:#172033;
-    min-height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:24px;
+  * {
+    box-sizing: border-box;
   }
 
-  .app{
-    width:min(760px,100%);
-    background:#fff;
-    border-radius:22px;
-    box-shadow:0 18px 50px rgba(31,51,92,.12);
-    padding:28px
+  body {
+    margin: 0;
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont,
+      "Segoe UI", Roboto, Arial, sans-serif;
+    background: linear-gradient(135deg, #f6f8ff, #eef7ff);
+    color: #172033;
+    min-height: 100vh;
+    padding: 30px 20px;
   }
 
-  h1{
-    margin:0 0 8px;
-    font-size:30px
+  .app {
+    width: min(900px, 100%);
+    margin: auto;
   }
 
-  .sub{
-    margin:0 0 24px;
-    color:#667085
+  /* HEADER */
+  .header {
+    text-align: center;
+    margin-bottom: 28px;
   }
 
-  .form{
-    display:grid;
-    grid-template-columns:1fr 1fr auto;
-    gap:12px;
-    margin-bottom:22px
+  .header h1 {
+    margin: 0 0 8px;
+    font-size: 32px;
   }
 
-  input,select,button{
-    border:1px solid #d9dee8;
-    border-radius:12px;
-    padding:12px 14px;
-    font-size:15px;
+  .header p {
+    margin: 0;
+    color: #667085;
   }
 
-  input:focus,select:focus{
-    outline:2px solid #b9c8ff;
-    border-color:#8297ff
+  /* SUBJECT SECTION */
+  .subject-section {
+    background: #fff;
+    border-radius: 22px;
+    box-shadow: 0 12px 40px rgba(31, 51, 92, 0.10);
+    padding: 24px;
+    margin-bottom: 24px;
   }
 
-  button{
-    cursor:pointer;
-    font-weight:700;
-    background:#172033;
-    color:#fff;
-    border:none
+  .subject-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 18px;
   }
 
-  button:disabled{
-    cursor:not-allowed;
-    opacity:.45
+  .subject-title-area h2 {
+    margin: 0 0 5px;
+    font-size: 24px;
   }
 
-  .card{
-    border:1px solid #e5e8ef;
-    border-radius:18px;
-    padding:20px
+  .subject-code {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: #eef2ff;
+    color: #4055c8;
+    font-size: 12px;
+    font-weight: 800;
   }
 
-  .top{
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-start;
-    gap:16px
+  .subject-description {
+    color: #667085;
+    font-size: 14px;
+    margin: 0;
   }
 
-  .badge{
-    display:inline-block;
-    background:#eef2ff;
-    color:#4055c8;
-    padding:6px 10px;
-    border-radius:999px;
-    font-size:12px;
-    font-weight:800
+  /* INPUT */
+  .form {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+    margin-bottom: 16px;
   }
 
-  h2{
-    margin:8px 0 4px;
-    font-size:24px
+  input {
+    width: 100%;
+    border: 1px solid #d9dee8;
+    border-radius: 12px;
+    padding: 13px 14px;
+    font-size: 15px;
+    outline: none;
   }
 
-  .subject{
-    color:#667085
+  input:focus {
+    border-color: #8297ff;
+    box-shadow: 0 0 0 3px rgba(130, 151, 255, 0.12);
   }
 
-  .progress-wrap{
-    margin:18px 0
+  button {
+    border: none;
+    border-radius: 12px;
+    padding: 12px 18px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    background: #172033;
+    color: #fff;
   }
 
-  .progress-label{
-    display:flex;
-    justify-content:space-between;
-    font-size:13px;
-    margin-bottom:8px;
-    color:#667085
+  button:hover:not(:disabled) {
+    opacity: 0.92;
   }
 
-  .bar{
-    height:10px;
-    background:#edf0f5;
-    border-radius:999px;
-    overflow:hidden
+  button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
   }
 
-  .fill{
-    height:100%;
-    width:0;
-    background:#4b63d3;
-    transition:width .25s
+  /* TRACKER */
+  .tracker {
+    margin-top: 18px;
+    border: 1px solid #e5e8ef;
+    border-radius: 18px;
+    padding: 20px;
   }
 
-  .checks{
-    display:flex;
-    flex-direction:column;
-    gap:11px
+  .tracker-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 15px;
   }
 
-  label.check{
-    display:flex;
-    align-items:flex-start;
-    gap:12px;
-    padding:12px 13px;
-    border:1px solid #e9ebf0;
-    border-radius:12px;
-    background:#fafbfc;
-    cursor:pointer
+  .badge {
+    display: inline-block;
+    background: #eef2ff;
+    color: #4055c8;
+    padding: 5px 9px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 800;
   }
 
-  label.check input{
-    margin-top:3px;
-    transform:scale(1.15)
+  .tracker-title {
+    margin: 8px 0 4px;
+    font-size: 22px;
+    word-break: break-word;
   }
 
-  label.check span{
-    line-height:1.4
+  .tracker-subject {
+    color: #667085;
+    font-size: 14px;
   }
 
-  .done{
-    background:#effaf3!important;
-    border-color:#bde7c9!important
+  /* PROGRESS */
+  .progress-wrap {
+    margin: 20px 0;
   }
 
-  .complete{
-    margin-top:16px;
-    padding:14px;
-    border-radius:12px;
-    background:#ecfdf3;
-    color:#1f7a46;
-    font-weight:700
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    color: #667085;
+    font-size: 13px;
+    margin-bottom: 8px;
   }
 
-  .hidden{
-    display:none
+  .bar {
+    height: 10px;
+    background: #edf0f5;
+    border-radius: 999px;
+    overflow: hidden;
   }
 
-  .small{
-    font-size:13px;
-    color:#667085
+  .fill {
+    height: 100%;
+    width: 0;
+    background: #4b63d3;
+    transition: width 0.25s;
   }
 
-  .history{
-    margin-top:22px;
-    padding-top:18px;
-    border-top:1px solid #eceff3
+  /* CHECKBOXES */
+  .checks {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
   }
 
-  .history h3{
-    margin:0 0 10px
+  .check {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 13px;
+    border: 1px solid #e9ebf0;
+    border-radius: 12px;
+    background: #fafbfc;
+    cursor: pointer;
+    transition: 0.2s;
   }
 
-  .item{
-    display:flex;
-    justify-content:space-between;
-    padding:10px 12px;
-    background:#f8f9fb;
-    border-radius:10px;
-    margin:7px 0
+  .check:hover {
+    border-color: #cfd5e1;
   }
 
-  @media(max-width:700px){
-    .form{
-      grid-template-columns:1fr
+  .check input {
+    width: auto;
+    margin-top: 3px;
+    transform: scale(1.15);
+    cursor: pointer;
+  }
+
+  .check span {
+    line-height: 1.4;
+  }
+
+  .done {
+    background: #effaf3 !important;
+    border-color: #bde7c9 !important;
+  }
+
+  /* COMPLETE */
+  .complete {
+    margin-top: 16px;
+    padding: 14px;
+    border-radius: 12px;
+    background: #ecfdf3;
+    color: #1f7a46;
+    font-weight: 700;
+  }
+
+  /* HISTORY */
+  .history {
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid #eceff3;
+  }
+
+  .history h3 {
+    margin: 0 0 10px;
+    font-size: 17px;
+  }
+
+  .history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .history-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    padding: 11px 13px;
+    background: #f8f9fb;
+    border-radius: 10px;
+  }
+
+  .history-topic {
+    font-weight: 700;
+  }
+
+  .history-date {
+    color: #667085;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
+  .small {
+    font-size: 13px;
+    color: #667085;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  /* MOBILE */
+  @media (max-width: 650px) {
+    body {
+      padding: 20px 12px;
     }
 
-    .app{
-      padding:20px
+    .subject-section {
+      padding: 18px;
+    }
+
+    .form {
+      grid-template-columns: 1fr;
+    }
+
+    .subject-header,
+    .tracker-top {
+      flex-direction: column;
+    }
+
+    .tracker-top button {
+      width: 100%;
+    }
+
+    .history-item {
+      flex-direction: column;
+      align-items: flex-start;
     }
   }
 </style>
@@ -212,101 +316,102 @@
 
 <div class="app">
 
-  <h1>Study 5-Step Tracker</h1>
+  <!-- HEADER -->
+  <div class="header">
+    <h1>Study 5-Step Tracker</h1>
+    <p>
+      Har chapter ko 5/5 steps complete hone ke baad hi complete mano.
+    </p>
+  </div>
 
-  <p class="sub">
-    Ek lecture/chapter ko tabhi complete mano jab 5/5 steps tick ho jaayen.
-  </p>
 
-  <!-- INPUT VIEW -->
-  <div id="inputView">
+  <!-- ==================================================
+       DISCRETE MATHEMATICS
+  =================================================== -->
+  <section class="subject-section">
+
+    <div class="subject-header">
+
+      <div class="subject-title-area">
+        <span class="subject-code">DM</span>
+        <h2>Discrete Mathematics</h2>
+        <p class="subject-description">
+          Chapter / Lecture tracker
+        </p>
+      </div>
+
+    </div>
+
 
     <div class="form">
 
-      <select id="subject">
-        <option value="">Subject select karo</option>
-        <option>Data Structures</option>
-        <option>Discrete Mathematics</option>
-        <option>Digital Electronics</option>
-      </select>
-
       <input
-        id="chapter"
+        id="dmChapter"
+        type="text"
         placeholder="Chapter / Lecture name"
       />
 
-      <button id="startBtn">
+      <button id="dmStartBtn">
         Start
       </button>
 
     </div>
 
-    <p class="small">
-      Subject ke hisaab se fixed 5-step workflow automatically aayega.
-    </p>
 
-  </div>
+    <div id="dmTracker" class="tracker hidden">
 
-
-  <!-- TRACKER VIEW -->
-  <div id="trackerView" class="hidden">
-
-    <div class="card">
-
-      <div class="top">
+      <div class="tracker-top">
 
         <div>
 
-          <span class="badge" id="badge"></span>
+          <span class="badge">DM</span>
 
-          <h2 id="title"></h2>
+          <h3
+            id="dmTitle"
+            class="tracker-title"
+          ></h3>
 
-          <div class="subject" id="subj"></div>
+          <div class="tracker-subject">
+            Discrete Mathematics
+          </div>
 
         </div>
 
-        <button id="newBtn" disabled>
+        <button
+          id="dmNewBtn"
+          disabled
+        >
           New Topic
         </button>
 
       </div>
 
 
-      <!-- PROGRESS -->
       <div class="progress-wrap">
 
         <div class="progress-label">
-
           <span>Progress</span>
-
-          <span id="count">
-            0/5
-          </span>
-
+          <span id="dmCount">0/5</span>
         </div>
 
         <div class="bar">
-
           <div
+            id="dmFill"
             class="fill"
-            id="fill"
           ></div>
-
         </div>
 
       </div>
 
 
-      <!-- CHECKBOXES -->
       <div
+        id="dmChecks"
         class="checks"
-        id="checks"
       ></div>
 
 
-      <!-- COMPLETE MESSAGE -->
       <div
-        id="completeMsg"
+        id="dmComplete"
         class="complete hidden"
       >
         🎉 5/5 complete! Ab next chapter/lecture enter karo.
@@ -315,45 +420,255 @@
     </div>
 
 
-    <!-- HISTORY -->
+    <!-- DM HISTORY -->
     <div class="history">
 
-      <h3>
-        Completed Topics
-      </h3>
+      <h3>Completed Topics</h3>
 
-      <div id="historyList">
+      <div
+        id="dmHistory"
+        class="history-list"
+      ></div>
 
-        <div class="small">
-          Abhi kuch complete nahi hua.
-        </div>
+    </div>
 
+  </section>
+
+
+
+  <!-- ==================================================
+       DATA STRUCTURES
+  =================================================== -->
+  <section class="subject-section">
+
+    <div class="subject-header">
+
+      <div class="subject-title-area">
+        <span class="subject-code">DS</span>
+        <h2>Data Structures</h2>
+        <p class="subject-description">
+          Chapter / Lecture tracker
+        </p>
       </div>
 
     </div>
 
-  </div>
+
+    <div class="form">
+
+      <input
+        id="dsChapter"
+        type="text"
+        placeholder="Chapter / Lecture name"
+      />
+
+      <button id="dsStartBtn">
+        Start
+      </button>
+
+    </div>
+
+
+    <div id="dsTracker" class="tracker hidden">
+
+      <div class="tracker-top">
+
+        <div>
+
+          <span class="badge">DS</span>
+
+          <h3
+            id="dsTitle"
+            class="tracker-title"
+          ></h3>
+
+          <div class="tracker-subject">
+            Data Structures
+          </div>
+
+        </div>
+
+        <button
+          id="dsNewBtn"
+          disabled
+        >
+          New Topic
+        </button>
+
+      </div>
+
+
+      <div class="progress-wrap">
+
+        <div class="progress-label">
+          <span>Progress</span>
+          <span id="dsCount">0/5</span>
+        </div>
+
+        <div class="bar">
+          <div
+            id="dsFill"
+            class="fill"
+          ></div>
+        </div>
+
+      </div>
+
+
+      <div
+        id="dsChecks"
+        class="checks"
+      ></div>
+
+
+      <div
+        id="dsComplete"
+        class="complete hidden"
+      >
+        🎉 5/5 complete! Ab next chapter/lecture enter karo.
+      </div>
+
+    </div>
+
+
+    <!-- DS HISTORY -->
+    <div class="history">
+
+      <h3>Completed Topics</h3>
+
+      <div
+        id="dsHistory"
+        class="history-list"
+      ></div>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- ==================================================
+       DIGITAL ELECTRONICS
+  =================================================== -->
+  <section class="subject-section">
+
+    <div class="subject-header">
+
+      <div class="subject-title-area">
+        <span class="subject-code">DE</span>
+        <h2>Digital Electronics</h2>
+        <p class="subject-description">
+          Chapter / Lecture tracker
+        </p>
+      </div>
+
+    </div>
+
+
+    <div class="form">
+
+      <input
+        id="deChapter"
+        type="text"
+        placeholder="Chapter / Lecture name"
+      />
+
+      <button id="deStartBtn">
+        Start
+      </button>
+
+    </div>
+
+
+    <div id="deTracker" class="tracker hidden">
+
+      <div class="tracker-top">
+
+        <div>
+
+          <span class="badge">DE</span>
+
+          <h3
+            id="deTitle"
+            class="tracker-title"
+          ></h3>
+
+          <div class="tracker-subject">
+            Digital Electronics
+          </div>
+
+        </div>
+
+        <button
+          id="deNewBtn"
+          disabled
+        >
+          New Topic
+        </button>
+
+      </div>
+
+
+      <div class="progress-wrap">
+
+        <div class="progress-label">
+          <span>Progress</span>
+          <span id="deCount">0/5</span>
+        </div>
+
+        <div class="bar">
+          <div
+            id="deFill"
+            class="fill"
+          ></div>
+        </div>
+
+      </div>
+
+
+      <div
+        id="deChecks"
+        class="checks"
+      ></div>
+
+
+      <div
+        id="deComplete"
+        class="complete hidden"
+      >
+        🎉 5/5 complete! Ab next chapter/lecture enter karo.
+      </div>
+
+    </div>
+
+
+    <!-- DE HISTORY -->
+    <div class="history">
+
+      <h3>Completed Topics</h3>
+
+      <div
+        id="deHistory"
+        class="history-list"
+      ></div>
+
+    </div>
+
+  </section>
 
 </div>
 
 
+
 <script>
 
-/* =====================================================
-   FIXED WORKFLOWS
-===================================================== */
+/* =========================================================
+   WORKFLOWS
+========================================================= */
 
 const workflows = {
 
-  "Data Structures": [
-    "GPT — Preview + Topics",
-    "NPTEL — Lecture",
-    "GPT + GFG — Doubt / Gap Fill",
-    "Practice — Code / Questions",
-    "Obsidian — Final Notes"
-  ],
-
-  "Discrete Mathematics": [
+  dm: [
     "GPT — Preview + Topics",
     "NPTEL — Lecture",
     "GPT — Doubt Clearing",
@@ -361,7 +676,15 @@ const workflows = {
     "Obsidian — Final Notes"
   ],
 
-  "Digital Electronics": [
+  ds: [
+    "GPT — Preview + Topics",
+    "NPTEL — Lecture",
+    "GPT + GFG — Doubt / Gap Fill",
+    "Practice — Code / Questions",
+    "Obsidian — Final Notes"
+  ],
+
+  de: [
     "GPT — Preview + Topics",
     "NPTEL — Lecture",
     "GPT — Doubt Clearing",
@@ -372,597 +695,584 @@ const workflows = {
 };
 
 
-/* =====================================================
-   DOM ELEMENTS
-===================================================== */
+/* =========================================================
+   SUBJECT CONFIGURATION
+========================================================= */
 
-const subject =
-  document.getElementById("subject");
+const subjects = {
 
-const chapter =
-  document.getElementById("chapter");
+  dm: {
+    name: "Discrete Mathematics",
+    code: "DM"
+  },
 
-const startBtn =
-  document.getElementById("startBtn");
+  ds: {
+    name: "Data Structures",
+    code: "DS"
+  },
 
-const newBtn =
-  document.getElementById("newBtn");
+  de: {
+    name: "Digital Electronics",
+    code: "DE"
+  }
 
-const inputView =
-  document.getElementById("inputView");
-
-const trackerView =
-  document.getElementById("trackerView");
-
-const badge =
-  document.getElementById("badge");
-
-const title =
-  document.getElementById("title");
-
-const subj =
-  document.getElementById("subj");
-
-const checks =
-  document.getElementById("checks");
-
-const count =
-  document.getElementById("count");
-
-const fill =
-  document.getElementById("fill");
-
-const completeMsg =
-  document.getElementById("completeMsg");
-
-const historyList =
-  document.getElementById("historyList");
+};
 
 
-/* =====================================================
-   LOAD SAVED DATA
-===================================================== */
+/* =========================================================
+   STORAGE
+========================================================= */
 
-/*
-  Current topic ko localStorage se load kar rahe hain.
+function getCurrentKey(subject) {
+  return `${subject}_current_topic`;
+}
 
-  Agar reload hua:
-  current topic + checkbox states restore ho jayenge.
-*/
-
-let current =
-  JSON.parse(
-    localStorage.getItem("studyCurrent") || "null"
-  );
+function getHistoryKey(subject) {
+  return `${subject}_completed_topics`;
+}
 
 
-/*
-  Completed topics ki history load kar rahe hain.
-*/
+function loadCurrent(subject) {
 
-let completed =
-  JSON.parse(
-    localStorage.getItem("studyCompleted") || "[]"
-  );
+  try {
 
+    return JSON.parse(
+      localStorage.getItem(
+        getCurrentKey(subject)
+      )
+    ) || null;
 
-/* =====================================================
-   SAVE CURRENT TOPIC
-===================================================== */
+  } catch (error) {
 
-function saveCurrent(){
-
-  if(current){
-
-    localStorage.setItem(
-      "studyCurrent",
-      JSON.stringify(current)
+    console.error(
+      "Current topic load error:",
+      error
     );
 
+    return null;
   }
+}
+
+
+function saveCurrent(subject, data) {
+
+  localStorage.setItem(
+    getCurrentKey(subject),
+    JSON.stringify(data)
+  );
 
 }
 
 
-/* =====================================================
-   REMOVE CURRENT TOPIC
-===================================================== */
-
-function clearCurrent(){
-
-  current = null;
+function clearCurrent(subject) {
 
   localStorage.removeItem(
-    "studyCurrent"
+    getCurrentKey(subject)
   );
 
 }
 
 
-/* =====================================================
-   RENDER HISTORY
-===================================================== */
+function loadHistory(subject) {
 
-function renderHistory(){
+  try {
 
-  if(!completed.length){
+    return JSON.parse(
+      localStorage.getItem(
+        getHistoryKey(subject)
+      )
+    ) || [];
 
-    historyList.innerHTML =
-      '<div class="small">Abhi kuch complete nahi hua.</div>';
+  } catch (error) {
 
-    return;
+    console.error(
+      "History load error:",
+      error
+    );
 
+    return [];
   }
+}
 
 
-  historyList.innerHTML =
-    completed
-      .slice()
-      .reverse()
-      .map(x => `
+function saveHistory(subject, history) {
 
-        <div class="item">
-
-          <span>
-
-            <strong>
-              ${escapeHtml(x.chapter)}
-            </strong>
-
-            <br>
-
-            <span class="small">
-              ${escapeHtml(x.subject)}
-            </span>
-
-          </span>
-
-          <span class="small">
-            ${x.date}
-          </span>
-
-        </div>
-
-      `)
-      .join("");
+  localStorage.setItem(
+    getHistoryKey(subject),
+    JSON.stringify(history)
+  );
 
 }
 
 
-/* =====================================================
+/* =========================================================
    HTML ESCAPE
-===================================================== */
+========================================================= */
 
-function escapeHtml(s){
+function escapeHtml(text) {
 
-  return s.replace(
+  return text.replace(
     /[&<>"']/g,
 
-    c => ({
-      "&":"&amp;",
-      "<":"&lt;",
-      ">":"&gt;",
-      '"':"&quot;",
-      "'":"&#039;"
-    }[c])
+    function(char) {
 
+      const entities = {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+      };
+
+      return entities[char];
+    }
   );
 
 }
 
 
-/* =====================================================
-   GET BADGE
-===================================================== */
+/* =========================================================
+   CREATE SUBJECT TRACKER
+========================================================= */
 
-function getBadge(s){
+function createTracker(subject) {
 
-  if(s === "Data Structures")
-    return "DS";
+  const config = subjects[subject];
 
-  if(s === "Discrete Mathematics")
-    return "DM";
+  const current =
+    loadCurrent(subject);
 
-  if(s === "Digital Electronics")
-    return "DE";
-
-  return "";
-
-}
+  const history =
+    loadHistory(subject);
 
 
-/* =====================================================
-   RENDER CURRENT TOPIC
-===================================================== */
+  const input =
+    document.getElementById(
+      `${subject}Chapter`
+    );
 
-function renderCurrentTopic(){
+  const startBtn =
+    document.getElementById(
+      `${subject}StartBtn`
+    );
 
-  if(!current){
+  const tracker =
+    document.getElementById(
+      `${subject}Tracker`
+    );
 
-    inputView.classList.remove("hidden");
+  const title =
+    document.getElementById(
+      `${subject}Title`
+    );
 
-    trackerView.classList.add("hidden");
+  const newBtn =
+    document.getElementById(
+      `${subject}NewBtn`
+    );
 
-    return;
+  const checks =
+    document.getElementById(
+      `${subject}Checks`
+    );
+
+  const count =
+    document.getElementById(
+      `${subject}Count`
+    );
+
+  const fill =
+    document.getElementById(
+      `${subject}Fill`
+    );
+
+  const complete =
+    document.getElementById(
+      `${subject}Complete`
+    );
+
+  const historyList =
+    document.getElementById(
+      `${subject}History`
+    );
+
+
+  /* -------------------------------------------------------
+     RENDER HISTORY
+  ------------------------------------------------------- */
+
+  function renderHistory() {
+
+    const history =
+      loadHistory(subject);
+
+    if (!history.length) {
+
+      historyList.innerHTML =
+        `<div class="small">
+          Abhi kuch complete nahi hua.
+        </div>`;
+
+      return;
+    }
+
+
+    historyList.innerHTML =
+      history
+        .slice()
+        .reverse()
+        .map(item => {
+
+          return `
+            <div class="history-item">
+
+              <span class="history-topic">
+                ${escapeHtml(item.chapter)}
+              </span>
+
+              <span class="history-date">
+                ${escapeHtml(item.date)}
+              </span>
+
+            </div>
+          `;
+
+        })
+        .join("");
 
   }
 
 
-  /*
-    Input view hide
-  */
+  /* -------------------------------------------------------
+     SAVE CURRENT STATE
+  ------------------------------------------------------- */
 
-  inputView.classList.add("hidden");
+  function saveState(data) {
 
-  trackerView.classList.remove("hidden");
-
-
-  /*
-    Topic information
-  */
-
-  badge.textContent =
-    getBadge(current.subject);
-
-  title.textContent =
-    current.chapter;
-
-  subj.textContent =
-    current.subject;
-
-
-  /*
-    Checkbox HTML create
-  */
-
-  checks.innerHTML =
-    workflows[current.subject]
-      .map((step,i) => `
-
-        <label
-          class="check"
-          id="row${i}"
-        >
-
-          <input
-            type="checkbox"
-            data-i="${i}"
-            ${current.checked[i] ? "checked" : ""}
-          >
-
-          <span>
-            ${i+1}. ${step}
-          </span>
-
-        </label>
-
-      `)
-      .join("");
-
-
-  /*
-    Checkbox event listeners
-  */
-
-  checks
-    .querySelectorAll("input")
-    .forEach(box => {
-
-      box.addEventListener(
-        "change",
-        updateProgress
-      );
-
-    });
-
-
-  /*
-    Current progress update
-  */
-
-  updateProgress(false);
-
-}
-
-
-/* =====================================================
-   START NEW TOPIC
-===================================================== */
-
-function startTopic(){
-
-  const s =
-    subject.value.trim();
-
-  const c =
-    chapter.value.trim();
-
-
-  if(!s || !c){
-
-    alert(
-      "Subject aur chapter/lecture name dono bharo."
+    saveCurrent(
+      subject,
+      data
     );
-
-    return;
 
   }
 
 
-  /*
-    New current topic
-  */
+  /* -------------------------------------------------------
+     RENDER CURRENT TOPIC
+  ------------------------------------------------------- */
 
-  current = {
+  function renderCurrent() {
 
-    subject:s,
-
-    chapter:c,
-
-    checked:Array(5).fill(false)
-
-  };
+    const data =
+      loadCurrent(subject);
 
 
-  /*
-    Save immediately.
+    if (!data) {
 
-    Ab user Start karte hi data save ho jayega.
-  */
+      tracker.classList.add("hidden");
 
-  saveCurrent();
-
-
-  /*
-    Render
-  */
-
-  renderCurrentTopic();
+      return;
+    }
 
 
-  /*
-    Scroll top
-  */
-
-  window.scrollTo({
-    top:0,
-    behavior:"smooth"
-  });
-
-}
-
-
-/* =====================================================
-   UPDATE PROGRESS
-===================================================== */
-
-function updateProgress(save = true){
-
-  if(!current)
-    return;
-
-
-  const boxes =
-    [
-      ...checks.querySelectorAll("input")
-    ];
-
-
-  /*
-    Checkbox states read
-  */
-
-  current.checked =
-    boxes.map(
-      b => b.checked
-    );
-
-
-  /*
-    Count
-  */
-
-  const done =
-    current.checked
-      .filter(Boolean)
-      .length;
-
-
-  /*
-    Progress text
-  */
-
-  count.textContent =
-    `${done}/5`;
-
-
-  /*
-    Progress bar
-  */
-
-  fill.style.width =
-    `${done * 20}%`;
-
-
-  /*
-    Green completed checkbox
-  */
-
-  boxes.forEach((b,i) => {
-
-    const row =
-      document.getElementById(
-        `row${i}`
-      );
-
-    row.classList.toggle(
-      "done",
-      b.checked
-    );
-
-  });
-
-
-  /*
-    IMPORTANT:
-    Current progress localStorage mein save karo.
-  */
-
-  if(save){
-
-    saveCurrent();
-
-  }
-
-
-  /*
-    5/5 complete
-  */
-
-  if(done === 5){
-
-    newBtn.disabled = false;
-
-    completeMsg.classList.remove(
+    tracker.classList.remove(
       "hidden"
     );
 
 
-    /*
-      History mein duplicate add nahi hoga.
-    */
+    title.textContent =
+      data.chapter;
 
-    if(
-      !completed.some(
-        x =>
-          x.subject === current.subject &&
-          x.chapter === current.chapter
-      )
-    ){
 
-      completed.push({
+    checks.innerHTML =
+      workflows[subject]
+        .map((step, index) => {
 
-        subject:current.subject,
+          const checked =
+            Boolean(data.checked[index]);
 
-        chapter:current.chapter,
+          return `
+            <label
+              class="check ${checked ? "done" : ""}"
+              id="${subject}Row${index}"
+            >
 
-        date:new Date()
-          .toLocaleDateString("en-IN")
+              <input
+                type="checkbox"
+                data-index="${index}"
+                ${checked ? "checked" : ""}
+              >
+
+              <span>
+                ${index + 1}. ${step}
+              </span>
+
+            </label>
+          `;
+
+        })
+        .join("");
+
+
+    checks
+      .querySelectorAll("input")
+      .forEach(box => {
+
+        box.addEventListener(
+          "change",
+          updateProgress
+        );
 
       });
 
 
-      localStorage.setItem(
-        "studyCompleted",
-        JSON.stringify(completed)
+    updateProgress(false);
+
+  }
+
+
+  /* -------------------------------------------------------
+     UPDATE PROGRESS
+  ------------------------------------------------------- */
+
+  function updateProgress(save = true) {
+
+    const data =
+      loadCurrent(subject);
+
+    if (!data)
+      return;
+
+
+    const boxes =
+      [
+        ...checks.querySelectorAll(
+          "input"
+        )
+      ];
+
+
+    data.checked =
+      boxes.map(
+        box => box.checked
       );
 
 
-      renderHistory();
+    const completedCount =
+      data.checked.filter(
+        Boolean
+      ).length;
+
+
+    count.textContent =
+      `${completedCount}/5`;
+
+
+    fill.style.width =
+      `${completedCount * 20}%`;
+
+
+    boxes.forEach(
+      (box, index) => {
+
+        const row =
+          document.getElementById(
+            `${subject}Row${index}`
+          );
+
+        if (row) {
+
+          row.classList.toggle(
+            "done",
+            box.checked
+          );
+
+        }
+
+      }
+    );
+
+
+    /* Save after every checkbox change */
+    if (save) {
+
+      saveState(data);
+
+    }
+
+
+    /* -----------------------------------------------------
+       5/5 COMPLETE
+    ----------------------------------------------------- */
+
+    if (completedCount === 5) {
+
+      newBtn.disabled = false;
+
+      complete.classList.remove(
+        "hidden"
+      );
+
+
+      let history =
+        loadHistory(subject);
+
+
+      const alreadyExists =
+        history.some(
+          item =>
+            item.chapter === data.chapter
+        );
+
+
+      if (!alreadyExists) {
+
+        history.push({
+
+          chapter: data.chapter,
+
+          date:
+            new Date()
+              .toLocaleDateString(
+                "en-IN"
+              )
+
+        });
+
+
+        saveHistory(
+          subject,
+          history
+        );
+
+
+        renderHistory();
+
+      }
+
+    } else {
+
+      newBtn.disabled = true;
+
+      complete.classList.add(
+        "hidden"
+      );
 
     }
 
   }
 
-  else{
 
-    newBtn.disabled = true;
+  /* -------------------------------------------------------
+     START TOPIC
+  ------------------------------------------------------- */
 
-    completeMsg.classList.add(
+  function startTopic() {
+
+    const chapter =
+      input.value.trim();
+
+
+    if (!chapter) {
+
+      alert(
+        "Chapter / Lecture name bharo."
+      );
+
+      input.focus();
+
+      return;
+    }
+
+
+    const data = {
+
+      chapter: chapter,
+
+      checked: Array(5).fill(false)
+
+    };
+
+
+    saveState(data);
+
+
+    renderCurrent();
+
+    input.value = "";
+
+  }
+
+
+  /* -------------------------------------------------------
+     NEW TOPIC
+  ------------------------------------------------------- */
+
+  function newTopic() {
+
+    clearCurrent(subject);
+
+    tracker.classList.add(
       "hidden"
     );
 
+    input.value = "";
+
+    input.focus();
+
   }
+
+
+  /* -------------------------------------------------------
+     EVENTS
+  ------------------------------------------------------- */
+
+  startBtn.addEventListener(
+    "click",
+    startTopic
+  );
+
+
+  input.addEventListener(
+    "keydown",
+    function(event) {
+
+      if (event.key === "Enter") {
+
+        startTopic();
+
+      }
+
+    }
+  );
+
+
+  newBtn.addEventListener(
+    "click",
+    newTopic
+  );
+
+
+  /* -------------------------------------------------------
+     INITIAL LOAD
+  ------------------------------------------------------- */
+
+  renderHistory();
+
+  renderCurrent();
 
 }
 
 
-/* =====================================================
-   NEW TOPIC BUTTON
-===================================================== */
+/* =========================================================
+   INITIALIZE ALL THREE SUBJECTS
+========================================================= */
 
-newBtn.addEventListener(
-  "click",
-  () => {
+createTracker("dm");
 
-    /*
-      Current topic clear karo.
-    */
+createTracker("ds");
 
-    clearCurrent();
-
-
-    /*
-      Input screen show karo.
-    */
-
-    inputView.classList.remove(
-      "hidden"
-    );
-
-    trackerView.classList.add(
-      "hidden"
-    );
-
-
-    /*
-      Inputs reset
-    */
-
-    subject.value = "";
-
-    chapter.value = "";
-
-    chapter.focus();
-
-  }
-);
-
-
-/* =====================================================
-   START BUTTON
-===================================================== */
-
-startBtn.addEventListener(
-  "click",
-  startTopic
-);
-
-
-/* =====================================================
-   ENTER KEY
-===================================================== */
-
-chapter.addEventListener(
-  "keydown",
-  e => {
-
-    if(e.key === "Enter"){
-
-      startTopic();
-
-    }
-
-  }
-);
-
-
-/* =====================================================
-   INITIAL LOAD
-===================================================== */
-
-/*
-  Page reload hone par:
-
-  1. localStorage se current topic load
-  2. checkbox states restore
-  3. progress restore
-  4. completed history restore
-*/
-
-renderHistory();
-
-renderCurrentTopic();
+createTracker("de");
 
 </script>
 

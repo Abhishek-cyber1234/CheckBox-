@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,7 +27,6 @@
     margin: auto;
   }
 
-  /* HEADER */
   .header {
     text-align: center;
     margin-bottom: 28px;
@@ -42,7 +42,6 @@
     color: #667085;
   }
 
-  /* SUBJECT SECTION */
   .subject-section {
     background: #fff;
     border-radius: 22px;
@@ -60,7 +59,7 @@
   }
 
   .subject-title-area h2 {
-    margin: 0 0 5px;
+    margin: 8px 0 5px;
     font-size: 24px;
   }
 
@@ -80,7 +79,6 @@
     margin: 0;
   }
 
-  /* INPUT */
   .form {
     display: grid;
     grid-template-columns: 1fr auto;
@@ -122,7 +120,6 @@
     cursor: not-allowed;
   }
 
-  /* TRACKER */
   .tracker {
     margin-top: 18px;
     border: 1px solid #e5e8ef;
@@ -158,7 +155,6 @@
     font-size: 14px;
   }
 
-  /* PROGRESS */
   .progress-wrap {
     margin: 20px 0;
   }
@@ -185,7 +181,6 @@
     transition: width 0.25s;
   }
 
-  /* CHECKBOXES */
   .checks {
     display: flex;
     flex-direction: column;
@@ -224,7 +219,6 @@
     border-color: #bde7c9 !important;
   }
 
-  /* COMPLETE */
   .complete {
     margin-top: 16px;
     padding: 14px;
@@ -234,7 +228,6 @@
     font-weight: 700;
   }
 
-  /* HISTORY */
   .history {
     margin-top: 22px;
     padding-top: 18px;
@@ -281,7 +274,6 @@
     display: none;
   }
 
-  /* MOBILE */
   @media (max-width: 650px) {
     body {
       padding: 20px 12px;
@@ -295,7 +287,6 @@
       grid-template-columns: 1fr;
     }
 
-    .subject-header,
     .tracker-top {
       flex-direction: column;
     }
@@ -316,7 +307,6 @@
 
 <div class="app">
 
-  <!-- HEADER -->
   <div class="header">
     <h1>Study 5-Step Tracker</h1>
     <p>
@@ -325,13 +315,11 @@
   </div>
 
 
-  <!-- ==================================================
-       DISCRETE MATHEMATICS
-  =================================================== -->
+  <!-- ==================== DISCRETE MATHEMATICS ==================== -->
+
   <section class="subject-section">
 
     <div class="subject-header">
-
       <div class="subject-title-area">
         <span class="subject-code">DM</span>
         <h2>Discrete Mathematics</h2>
@@ -339,53 +327,36 @@
           Chapter / Lecture tracker
         </p>
       </div>
-
     </div>
 
-
     <div class="form">
-
       <input
         id="dmChapter"
         type="text"
         placeholder="Chapter / Lecture name"
       />
-
-      <button id="dmStartBtn">
-        Start
-      </button>
-
+      <button id="dmStartBtn">Start</button>
     </div>
-
 
     <div id="dmTracker" class="tracker hidden">
 
       <div class="tracker-top">
 
         <div>
-
           <span class="badge">DM</span>
 
-          <h3
-            id="dmTitle"
-            class="tracker-title"
-          ></h3>
+          <h3 id="dmTitle" class="tracker-title"></h3>
 
           <div class="tracker-subject">
             Discrete Mathematics
           </div>
-
         </div>
 
-        <button
-          id="dmNewBtn"
-          disabled
-        >
+        <button id="dmNewBtn" disabled>
           New Topic
         </button>
 
       </div>
-
 
       <div class="progress-wrap">
 
@@ -395,54 +366,33 @@
         </div>
 
         <div class="bar">
-          <div
-            id="dmFill"
-            class="fill"
-          ></div>
+          <div id="dmFill" class="fill"></div>
         </div>
 
       </div>
 
+      <div id="dmChecks" class="checks"></div>
 
-      <div
-        id="dmChecks"
-        class="checks"
-      ></div>
-
-
-      <div
-        id="dmComplete"
-        class="complete hidden"
-      >
+      <div id="dmComplete" class="complete hidden">
         🎉 5/5 complete! Ab next chapter/lecture enter karo.
       </div>
 
     </div>
 
-
-    <!-- DM HISTORY -->
     <div class="history">
-
       <h3>Completed Topics</h3>
 
-      <div
-        id="dmHistory"
-        class="history-list"
-      ></div>
-
+      <div id="dmHistory" class="history-list"></div>
     </div>
 
   </section>
 
 
+  <!-- ==================== DATA STRUCTURES ==================== -->
 
-  <!-- ==================================================
-       DATA STRUCTURES
-  =================================================== -->
   <section class="subject-section">
 
     <div class="subject-header">
-
       <div class="subject-title-area">
         <span class="subject-code">DS</span>
         <h2>Data Structures</h2>
@@ -450,53 +400,36 @@
           Chapter / Lecture tracker
         </p>
       </div>
-
     </div>
 
-
     <div class="form">
-
       <input
         id="dsChapter"
         type="text"
         placeholder="Chapter / Lecture name"
       />
-
-      <button id="dsStartBtn">
-        Start
-      </button>
-
+      <button id="dsStartBtn">Start</button>
     </div>
-
 
     <div id="dsTracker" class="tracker hidden">
 
       <div class="tracker-top">
 
         <div>
-
           <span class="badge">DS</span>
 
-          <h3
-            id="dsTitle"
-            class="tracker-title"
-          ></h3>
+          <h3 id="dsTitle" class="tracker-title"></h3>
 
           <div class="tracker-subject">
             Data Structures
           </div>
-
         </div>
 
-        <button
-          id="dsNewBtn"
-          disabled
-        >
+        <button id="dsNewBtn" disabled>
           New Topic
         </button>
 
       </div>
-
 
       <div class="progress-wrap">
 
@@ -506,54 +439,33 @@
         </div>
 
         <div class="bar">
-          <div
-            id="dsFill"
-            class="fill"
-          ></div>
+          <div id="dsFill" class="fill"></div>
         </div>
 
       </div>
 
+      <div id="dsChecks" class="checks"></div>
 
-      <div
-        id="dsChecks"
-        class="checks"
-      ></div>
-
-
-      <div
-        id="dsComplete"
-        class="complete hidden"
-      >
+      <div id="dsComplete" class="complete hidden">
         🎉 5/5 complete! Ab next chapter/lecture enter karo.
       </div>
 
     </div>
 
-
-    <!-- DS HISTORY -->
     <div class="history">
-
       <h3>Completed Topics</h3>
 
-      <div
-        id="dsHistory"
-        class="history-list"
-      ></div>
-
+      <div id="dsHistory" class="history-list"></div>
     </div>
 
   </section>
 
 
+  <!-- ==================== DIGITAL ELECTRONICS ==================== -->
 
-  <!-- ==================================================
-       DIGITAL ELECTRONICS
-  =================================================== -->
   <section class="subject-section">
 
     <div class="subject-header">
-
       <div class="subject-title-area">
         <span class="subject-code">DE</span>
         <h2>Digital Electronics</h2>
@@ -561,53 +473,36 @@
           Chapter / Lecture tracker
         </p>
       </div>
-
     </div>
 
-
     <div class="form">
-
       <input
         id="deChapter"
         type="text"
         placeholder="Chapter / Lecture name"
       />
-
-      <button id="deStartBtn">
-        Start
-      </button>
-
+      <button id="deStartBtn">Start</button>
     </div>
-
 
     <div id="deTracker" class="tracker hidden">
 
       <div class="tracker-top">
 
         <div>
-
           <span class="badge">DE</span>
 
-          <h3
-            id="deTitle"
-            class="tracker-title"
-          ></h3>
+          <h3 id="deTitle" class="tracker-title"></h3>
 
           <div class="tracker-subject">
             Digital Electronics
           </div>
-
         </div>
 
-        <button
-          id="deNewBtn"
-          disabled
-        >
+        <button id="deNewBtn" disabled>
           New Topic
         </button>
 
       </div>
-
 
       <div class="progress-wrap">
 
@@ -617,41 +512,23 @@
         </div>
 
         <div class="bar">
-          <div
-            id="deFill"
-            class="fill"
-          ></div>
+          <div id="deFill" class="fill"></div>
         </div>
 
       </div>
 
+      <div id="deChecks" class="checks"></div>
 
-      <div
-        id="deChecks"
-        class="checks"
-      ></div>
-
-
-      <div
-        id="deComplete"
-        class="complete hidden"
-      >
+      <div id="deComplete" class="complete hidden">
         🎉 5/5 complete! Ab next chapter/lecture enter karo.
       </div>
 
     </div>
 
-
-    <!-- DE HISTORY -->
     <div class="history">
-
       <h3>Completed Topics</h3>
 
-      <div
-        id="deHistory"
-        class="history-list"
-      ></div>
-
+      <div id="deHistory" class="history-list"></div>
     </div>
 
   </section>
@@ -659,11 +536,10 @@
 </div>
 
 
-
 <script>
 
 /* =========================================================
-   WORKFLOWS
+   SAME 5-STEP WORKFLOW FOR ALL THREE SUBJECTS
 ========================================================= */
 
 const workflows = {
@@ -671,32 +547,32 @@ const workflows = {
   dm: [
     "GPT — Preview + Topics",
     "NPTEL — Lecture",
+    "Obsidian — Notes Writing",
     "GPT — Doubt Clearing",
-    "Practice — Questions",
-    "Obsidian — Final Notes"
+    "Practice — Questions / PYQs"
   ],
 
   ds: [
     "GPT — Preview + Topics",
     "NPTEL — Lecture",
-    "GPT + GFG — Doubt / Gap Fill",
-    "Practice — Code / Questions",
-    "Obsidian — Final Notes"
+    "Obsidian — Notes Writing",
+    "GPT — Doubt Clearing",
+    "Practice — Questions / PYQs"
   ],
 
   de: [
     "GPT — Preview + Topics",
     "NPTEL — Lecture",
+    "Obsidian — Notes Writing",
     "GPT — Doubt Clearing",
-    "Practice — Problems / PYQs",
-    "Obsidian — Final Notes"
+    "Practice — Questions / PYQs"
   ]
 
 };
 
 
 /* =========================================================
-   SUBJECT CONFIGURATION
+   SUBJECT INFORMATION
 ========================================================= */
 
 const subjects = {
@@ -720,7 +596,7 @@ const subjects = {
 
 
 /* =========================================================
-   STORAGE
+   LOCAL STORAGE
 ========================================================= */
 
 function getCurrentKey(subject) {
@@ -751,6 +627,7 @@ function loadCurrent(subject) {
 
     return null;
   }
+
 }
 
 
@@ -792,6 +669,7 @@ function loadHistory(subject) {
 
     return [];
   }
+
 }
 
 
@@ -806,7 +684,7 @@ function saveHistory(subject, history) {
 
 
 /* =========================================================
-   HTML ESCAPE
+   SECURITY — ESCAPE HTML
 ========================================================= */
 
 function escapeHtml(text) {
@@ -832,19 +710,10 @@ function escapeHtml(text) {
 
 
 /* =========================================================
-   CREATE SUBJECT TRACKER
+   CREATE EACH SUBJECT TRACKER
 ========================================================= */
 
 function createTracker(subject) {
-
-  const config = subjects[subject];
-
-  const current =
-    loadCurrent(subject);
-
-  const history =
-    loadHistory(subject);
-
 
   const input =
     document.getElementById(
@@ -897,9 +766,9 @@ function createTracker(subject) {
     );
 
 
-  /* -------------------------------------------------------
-     RENDER HISTORY
-  ------------------------------------------------------- */
+  /* =======================================================
+     HISTORY
+  ======================================================= */
 
   function renderHistory() {
 
@@ -943,23 +812,9 @@ function createTracker(subject) {
   }
 
 
-  /* -------------------------------------------------------
-     SAVE CURRENT STATE
-  ------------------------------------------------------- */
-
-  function saveState(data) {
-
-    saveCurrent(
-      subject,
-      data
-    );
-
-  }
-
-
-  /* -------------------------------------------------------
+  /* =======================================================
      RENDER CURRENT TOPIC
-  ------------------------------------------------------- */
+  ======================================================= */
 
   function renderCurrent() {
 
@@ -989,7 +844,9 @@ function createTracker(subject) {
         .map((step, index) => {
 
           const checked =
-            Boolean(data.checked[index]);
+            Boolean(
+              data.checked[index]
+            );
 
           return `
             <label
@@ -1031,9 +888,9 @@ function createTracker(subject) {
   }
 
 
-  /* -------------------------------------------------------
+  /* =======================================================
      UPDATE PROGRESS
-  ------------------------------------------------------- */
+  ======================================================= */
 
   function updateProgress(save = true) {
 
@@ -1093,17 +950,24 @@ function createTracker(subject) {
     );
 
 
-    /* Save after every checkbox change */
+    /*
+      Har checkbox change ke baad current
+      progress permanently save hoti hai.
+    */
+
     if (save) {
 
-      saveState(data);
+      saveCurrent(
+        subject,
+        data
+      );
 
     }
 
 
-    /* -----------------------------------------------------
+    /* =====================================================
        5/5 COMPLETE
-    ----------------------------------------------------- */
+    ===================================================== */
 
     if (completedCount === 5) {
 
@@ -1129,7 +993,8 @@ function createTracker(subject) {
 
         history.push({
 
-          chapter: data.chapter,
+          chapter:
+            data.chapter,
 
           date:
             new Date()
@@ -1163,9 +1028,9 @@ function createTracker(subject) {
   }
 
 
-  /* -------------------------------------------------------
+  /* =======================================================
      START TOPIC
-  ------------------------------------------------------- */
+  ======================================================= */
 
   function startTopic() {
 
@@ -1189,12 +1054,16 @@ function createTracker(subject) {
 
       chapter: chapter,
 
-      checked: Array(5).fill(false)
+      checked:
+        Array(5).fill(false)
 
     };
 
 
-    saveState(data);
+    saveCurrent(
+      subject,
+      data
+    );
 
 
     renderCurrent();
@@ -1204,17 +1073,21 @@ function createTracker(subject) {
   }
 
 
-  /* -------------------------------------------------------
+  /* =======================================================
      NEW TOPIC
-  ------------------------------------------------------- */
+  ======================================================= */
 
   function newTopic() {
 
-    clearCurrent(subject);
+    clearCurrent(
+      subject
+    );
+
 
     tracker.classList.add(
       "hidden"
     );
+
 
     input.value = "";
 
@@ -1223,9 +1096,9 @@ function createTracker(subject) {
   }
 
 
-  /* -------------------------------------------------------
+  /* =======================================================
      EVENTS
-  ------------------------------------------------------- */
+  ======================================================= */
 
   startBtn.addEventListener(
     "click",
@@ -1253,9 +1126,9 @@ function createTracker(subject) {
   );
 
 
-  /* -------------------------------------------------------
+  /* =======================================================
      INITIAL LOAD
-  ------------------------------------------------------- */
+  ======================================================= */
 
   renderHistory();
 
@@ -1265,7 +1138,7 @@ function createTracker(subject) {
 
 
 /* =========================================================
-   INITIALIZE ALL THREE SUBJECTS
+   INITIALIZE DM + DS + DE
 ========================================================= */
 
 createTracker("dm");
@@ -1278,3 +1151,4 @@ createTracker("de");
 
 </body>
 </html>
+```

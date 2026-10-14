@@ -1,1281 +1,545 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-<title>Study 5-Step Tracker</title>
-
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101827">
+<title>DSA Sprint — Day-wise Tracker</title>
 <style>
-  * {
-    box-sizing: border-box;
-  }
-
-  body {
-    margin: 0;
-    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont,
-      "Segoe UI", Roboto, Arial, sans-serif;
-    background: linear-gradient(135deg, #f6f8ff, #eef7ff);
-    color: #172033;
-    min-height: 100vh;
-    padding: 30px 20px;
-  }
-
-  .app {
-    width: min(900px, 100%);
-    margin: auto;
-  }
-
-  .header {
-    text-align: center;
-    margin-bottom: 28px;
-  }
-
-  .header h1 {
-    margin: 0 0 8px;
-    font-size: 32px;
-  }
-
-  .header p {
-    margin: 0;
-    color: #667085;
-  }
-
-  .subject-section {
-    background: #fff;
-    border-radius: 22px;
-    box-shadow: 0 12px 40px rgba(31, 51, 92, 0.10);
-    padding: 24px;
-    margin-bottom: 24px;
-  }
-
-  .subject-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 18px;
-  }
-
-  .subject-title-area h2 {
-    margin: 8px 0 5px;
-    font-size: 24px;
-  }
-
-  .subject-code {
-    display: inline-block;
-    padding: 5px 10px;
-    border-radius: 999px;
-    background: #eef2ff;
-    color: #4055c8;
-    font-size: 12px;
-    font-weight: 800;
-  }
-
-  .subject-description {
-    color: #667085;
-    font-size: 14px;
-    margin: 0;
-  }
-
-  .form {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 12px;
-    margin-bottom: 16px;
-  }
-
-  input {
-    width: 100%;
-    border: 1px solid #d9dee8;
-    border-radius: 12px;
-    padding: 13px 14px;
-    font-size: 15px;
-    outline: none;
-  }
-
-  input:focus {
-    border-color: #8297ff;
-    box-shadow: 0 0 0 3px rgba(130, 151, 255, 0.12);
-  }
-
-  button {
-    border: none;
-    border-radius: 12px;
-    padding: 12px 18px;
-    font-size: 15px;
-    font-weight: 700;
-    cursor: pointer;
-    background: #172033;
-    color: #fff;
-  }
-
-  button:hover:not(:disabled) {
-    opacity: 0.92;
-  }
-
-  button:disabled {
-    opacity: 0.45;
-    cursor: not-allowed;
-  }
-
-  .tracker {
-    margin-top: 18px;
-    border: 1px solid #e5e8ef;
-    border-radius: 18px;
-    padding: 20px;
-  }
-
-  .tracker-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 15px;
-  }
-
-  .badge {
-    display: inline-block;
-    background: #eef2ff;
-    color: #4055c8;
-    padding: 5px 9px;
-    border-radius: 999px;
-    font-size: 12px;
-    font-weight: 800;
-  }
-
-  .tracker-title {
-    margin: 8px 0 4px;
-    font-size: 22px;
-    word-break: break-word;
-  }
-
-  .tracker-subject {
-    color: #667085;
-    font-size: 14px;
-  }
-
-  .progress-wrap {
-    margin: 20px 0;
-  }
-
-  .progress-label {
-    display: flex;
-    justify-content: space-between;
-    color: #667085;
-    font-size: 13px;
-    margin-bottom: 8px;
-  }
-
-  .bar {
-    height: 10px;
-    background: #edf0f5;
-    border-radius: 999px;
-    overflow: hidden;
-  }
-
-  .fill {
-    height: 100%;
-    width: 0;
-    background: #4b63d3;
-    transition: width 0.25s;
-  }
-
-  .checks {
-    display: flex;
-    flex-direction: column;
-    gap: 11px;
-  }
-
-  .check {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    padding: 12px 13px;
-    border: 1px solid #e9ebf0;
-    border-radius: 12px;
-    background: #fafbfc;
-    cursor: pointer;
-    transition: 0.2s;
-  }
-
-  .check:hover {
-    border-color: #cfd5e1;
-  }
-
-  .check input {
-    width: auto;
-    margin-top: 3px;
-    transform: scale(1.15);
-    cursor: pointer;
-  }
-
-  .check span {
-    line-height: 1.4;
-  }
-
-  .done {
-    background: #effaf3 !important;
-    border-color: #bde7c9 !important;
-  }
-
-  .complete {
-    margin-top: 16px;
-    padding: 14px;
-    border-radius: 12px;
-    background: #ecfdf3;
-    color: #1f7a46;
-    font-weight: 700;
-  }
-
-  .history {
-    margin-top: 22px;
-    padding-top: 18px;
-    border-top: 1px solid #eceff3;
-  }
-
-  .history h3 {
-    margin: 0 0 10px;
-    font-size: 17px;
-  }
-
-  .history-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .history-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 15px;
-    padding: 11px 13px;
-    background: #f8f9fb;
-    border-radius: 10px;
-  }
-
-  .history-topic {
-    font-weight: 700;
-  }
-
-  .history-date {
-    color: #667085;
-    font-size: 13px;
-    white-space: nowrap;
-  }
-
-  .small {
-    font-size: 13px;
-    color: #667085;
-  }
-
-  .hidden {
-    display: none;
-  }
-
-  @media (max-width: 650px) {
-    body {
-      padding: 20px 12px;
-    }
-
-    .subject-section {
-      padding: 18px;
-    }
-
-    .form {
-      grid-template-columns: 1fr;
-    }
-
-    .tracker-top {
-      flex-direction: column;
-    }
-
-    .tracker-top button {
-      width: 100%;
-    }
-
-    .history-item {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-  }
+:root{
+  --bg:#f4f6fa; --surface:#fff; --surface2:#f8fafc; --text:#142033; --muted:#64748b;
+  --line:#e2e8f0; --navy:#101827; --navy2:#172337; --accent:#27c7a5; --accent2:#117b69;
+  --accentSoft:#e3faf3; --blue:#5274f8; --blueSoft:#edf1ff; --amber:#f59e0b; --amberSoft:#fff7df;
+  --red:#ef4444; --shadow:0 14px 40px rgba(18,34,57,.07); --radius:20px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+a{color:inherit}
+.app{min-height:100vh;display:grid;grid-template-columns:250px minmax(0,1fr)}
+.sidebar{background:var(--navy);color:#f8fafc;padding:25px 17px;display:flex;flex-direction:column;gap:28px;min-height:100vh;position:sticky;top:0;height:100vh}
+.brand{display:flex;align-items:center;gap:11px;padding:0 8px}
+.brand-mark{width:39px;height:39px;border-radius:13px;background:linear-gradient(140deg,#50ebc8,#16a085);display:grid;place-items:center;color:#073d35;font-weight:900;font-size:20px;box-shadow:0 7px 22px rgba(39,199,165,.2)}
+.brand-name{font-weight:850;letter-spacing:.2px;font-size:15px}
+.brand-sub{font-size:11px;color:#9aa8bc;letter-spacing:1.1px;text-transform:uppercase;margin-top:1px}
+.nav-label{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:#78869b;font-weight:800;padding:0 13px;margin-bottom:9px}
+.nav{display:grid;gap:6px}
+.nav-btn{border:0;background:transparent;color:#acb8c9;display:flex;gap:12px;align-items:center;padding:12px 13px;border-radius:12px;text-align:left;transition:.18s}
+.nav-btn:hover{background:#1c2a40;color:white}
+.nav-btn.active{background:rgba(39,199,165,.14);color:#67e8ce;font-weight:750}
+.nav-icon{width:21px;text-align:center;font-size:17px}
+.sidebar-bottom{margin-top:auto;display:grid;gap:12px}
+.side-progress{padding:16px 14px;border:1px solid #28364b;background:#172337;border-radius:16px}
+.side-progress-top{display:flex;justify-content:space-between;font-size:12px;margin-bottom:10px;color:#cad3df}
+.meter{height:7px;border-radius:99px;background:#dfe7ef;overflow:hidden}
+.meter.dark{background:#2a394f}
+.meter-fill{height:100%;width:0;background:linear-gradient(90deg,#26c7a5,#70ead2);border-radius:99px;transition:width .3s}
+.side-caption{font-size:11px;color:#8e9db3;margin-top:9px}
+.side-actions{display:flex;gap:7px;flex-wrap:wrap}
+.side-action{font-size:11px;color:#c4d0df;background:#202e43;border:1px solid #344258;padding:7px 9px;border-radius:9px}
+.main{min-width:0;padding:0 34px 45px;max-width:1600px;width:100%;margin:0 auto}
+.topbar{height:82px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);gap:16px}
+.breadcrumb{font-size:13px;color:var(--muted)}
+.breadcrumb b{color:var(--text)}
+.top-actions{display:flex;align-items:center;gap:10px}
+.today-chip{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:9px 12px;font-size:12px;color:#425069;white-space:nowrap}
+.avatar{height:34px;width:34px;border-radius:12px;background:var(--blueSoft);color:#405ad5;display:grid;place-items:center;font-size:12px;font-weight:850}
+main{padding-top:27px}
+.page{display:none;animation:fadeIn .22s ease}
+.page.active{display:block}
+@keyframes fadeIn{from{opacity:.35;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
+.hero{border-radius:25px;padding:30px 32px;background:radial-gradient(circle at 80% 25%,rgba(39,199,165,.26),transparent 25%),linear-gradient(130deg,#111d30,#182c44 68%,#1b3a4a);color:white;position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;right:-90px;bottom:-150px;width:330px;height:330px;border:1px solid rgba(107,235,211,.25);border-radius:50%;box-shadow:0 0 0 30px rgba(107,235,211,.04),0 0 0 65px rgba(107,235,211,.025)}
+.hero-content{position:relative;z-index:1;max-width:760px}
+.eyebrow{font-size:11px;font-weight:850;text-transform:uppercase;letter-spacing:1.5px;color:#71ecd3;display:flex;align-items:center;gap:8px}
+.dot{display:inline-block;width:7px;height:7px;border-radius:99px;background:#61ebd0;box-shadow:0 0 0 4px rgba(97,235,208,.1)}
+.hero h1{font-size:clamp(28px,3.4vw,43px);line-height:1.08;letter-spacing:-1.5px;margin:16px 0 12px;max-width:680px}
+.hero p{margin:0;color:#b9c8d9;font-size:14px;max-width:590px;line-height:1.7}
+.hero-bottom{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:24px}
+.btn{border:0;border-radius:11px;padding:11px 15px;font-weight:750;font-size:13px;display:inline-flex;gap:8px;align-items:center;justify-content:center;transition:transform .12s,background .15s}
+.btn:active{transform:scale(.98)}
+.btn-primary{background:var(--accent);color:#073e35}
+.btn-primary:hover{background:#53dfc1}
+.btn-light{background:white;color:#18283c}
+.btn-outline{background:transparent;color:var(--text);border:1px solid var(--line)}
+.btn-ghost{background:rgba(255,255,255,.08);color:#e8f0f8;border:1px solid rgba(255,255,255,.13)}
+.small-btn{padding:7px 10px;font-size:11px;border-radius:9px}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:20px 0}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:17px;padding:18px 19px;box-shadow:0 4px 18px rgba(30,50,80,.025)}
+.stat-head{display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:12px;font-weight:650}
+.stat-ico{width:31px;height:31px;border-radius:10px;display:grid;place-items:center;background:var(--accentSoft);color:var(--accent2);font-size:15px}
+.stat-num{font-size:28px;font-weight:850;letter-spacing:-1px;margin-top:10px;line-height:1.1}
+.stat-foot{font-size:11px;color:var(--muted);margin-top:7px}
+.section-head{display:flex;align-items:end;justify-content:space-between;gap:14px;margin:26px 0 13px}
+.section-head h2{font-size:18px;letter-spacing:-.4px;margin:0}
+.section-head p{margin:4px 0 0;color:var(--muted);font-size:12px}
+.link-btn{border:0;background:transparent;color:var(--accent2);font-weight:800;font-size:12px;padding:6px 0}
+.two-col{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(270px,.85fr);gap:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 3px 18px rgba(30,50,80,.025);min-width:0}
+.card-pad{padding:22px}
+.card-header{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.card-title{font-weight:850;font-size:16px;letter-spacing:-.3px}
+.muted{color:var(--muted)}
+.text-sm{font-size:12px}
+.tag{display:inline-flex;align-items:center;gap:6px;font-size:10px;letter-spacing:.3px;text-transform:uppercase;font-weight:850;padding:6px 9px;border-radius:8px;color:#156454;background:var(--accentSoft)}
+.tag.blue{color:#4158c9;background:var(--blueSoft)}
+.tag.amber{color:#915d04;background:var(--amberSoft)}
+.day-number{width:47px;height:47px;flex:0 0 auto;border-radius:14px;background:var(--navy);color:#72ecd1;display:grid;place-items:center;font-size:14px;font-weight:900}
+.focus-title{font-size:23px;letter-spacing:-.7px;line-height:1.2;margin:14px 0 7px}
+.focus-meta{display:flex;gap:9px;align-items:center;flex-wrap:wrap;color:var(--muted);font-size:12px}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
+.info-box{padding:15px;border-radius:14px;border:1px solid var(--line);background:var(--surface2)}
+.info-label{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:1px;font-weight:850;margin-bottom:8px}
+.info-text{font-size:13px;white-space:pre-wrap;line-height:1.62}
+.checklist{display:grid;gap:10px;margin-top:20px}
+.check-row{display:flex;gap:11px;align-items:flex-start;padding:12px;border:1px solid var(--line);border-radius:13px;background:#fff;cursor:pointer;transition:.15s}
+.check-row:hover{border-color:#98e7d6;background:#fbfffd}
+.check-row.checked{border-color:#b1eadc;background:#f0fcf8}
+.check-input{appearance:none;width:19px;height:19px;border:1.7px solid #bdc8d5;border-radius:6px;margin:1px 0 0;flex:0 0 auto;display:grid;place-items:center;background:white}
+.check-input:checked{background:var(--accent2);border-color:var(--accent2)}
+.check-input:checked:after{content:"✓";color:white;font-size:13px;font-weight:900}
+.check-copy strong{font-size:12px;display:block}
+.check-copy span{font-size:11px;color:var(--muted);display:block;margin-top:3px}
+.focus-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:17px}
+.side-card{padding:21px}
+.quick-list{display:grid;gap:0;margin-top:14px}
+.quick-row{display:flex;gap:11px;padding:13px 0;border-bottom:1px solid var(--line);align-items:flex-start}
+.quick-row:last-child{border-bottom:0}
+.quick-date{font-size:10px;line-height:1.35;font-weight:850;color:var(--muted);width:40px;flex:0 0 auto}
+.quick-copy{min-width:0;flex:1}
+.quick-copy strong{font-size:12px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.quick-copy span{display:block;font-size:11px;color:var(--muted);margin-top:4px}
+.mini-status{font-size:10px;color:var(--muted);border:1px solid var(--line);border-radius:99px;padding:4px 7px;white-space:nowrap}
+.mini-status.done{color:var(--accent2);border-color:#b6eade;background:#f0fcf8}
+.phase-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.phase-card{border:1px solid var(--line);border-radius:15px;padding:16px;background:var(--surface);min-width:0}
+.phase-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.phase-name{font-size:13px;font-weight:850}
+.phase-meta{font-size:11px;color:var(--muted);margin-top:5px}
+.phase-count{font-size:11px;font-weight:850;color:var(--accent2);white-space:nowrap}
+.phase-card .meter{margin-top:13px;height:5px}
+.filters{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:18px 0}
+.search-box{min-width:190px;flex:1;position:relative}
+.search-box input{width:100%;padding:11px 12px 11px 36px;border:1px solid var(--line);border-radius:11px;background:var(--surface);outline:none;font-size:12px}
+.search-box input:focus,select:focus,textarea:focus{border-color:#6bd9c4;box-shadow:0 0 0 3px rgba(39,199,165,.12)}
+.search-icon{position:absolute;left:13px;top:9px;color:#96a3b5;font-size:16px}
+select{padding:10px 31px 10px 11px;border:1px solid var(--line);background:var(--surface);border-radius:11px;font-size:12px;color:var(--text);outline:none}
+.day-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.day-card{padding:17px;border:1px solid var(--line);background:var(--surface);border-radius:16px;min-width:0;transition:.15s}
+.day-card:hover{border-color:#b8d9d4;box-shadow:0 8px 22px rgba(30,50,80,.05);transform:translateY(-1px)}
+.day-card-top{display:flex;justify-content:space-between;gap:9px;align-items:flex-start}
+.date-block{display:flex;gap:10px;align-items:center;min-width:0}
+.date-square{background:#eef3f8;border-radius:10px;padding:7px 8px;min-width:47px;text-align:center}
+.date-square b{font-size:15px;display:block;line-height:1.1}
+.date-square small{font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--muted)}
+.day-card-title{font-size:13px;font-weight:850;line-height:1.35;margin-top:13px}
+.day-card-desc{font-size:11px;line-height:1.55;color:var(--muted);margin-top:7px;white-space:pre-wrap;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.day-card-bottom{display:flex;align-items:center;justify-content:space-between;gap:9px;margin-top:15px}
+.mini-meter{height:4px;background:#e8edf2;border-radius:99px;overflow:hidden;margin-top:12px}
+.mini-meter span{display:block;height:100%;background:var(--accent);border-radius:99px}
+.pill{display:inline-flex;gap:5px;align-items:center;background:#f1f4f9;border-radius:99px;padding:5px 8px;color:#5d6d83;font-size:10px;font-weight:750}
+.empty-state{padding:36px 20px;text-align:center;color:var(--muted);border:1px dashed #cbd5e1;border-radius:16px;background:rgba(255,255,255,.55)}
+.review-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.review-card{padding:19px}
+.review-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.review-week{font-size:14px;font-weight:850}
+.review-dates{font-size:11px;color:var(--muted);margin-top:4px}
+.week-dots{display:flex;gap:5px;margin:15px 0 12px}
+.week-dot{height:6px;flex:1;background:#e8edf2;border-radius:99px}
+.week-dot.done{background:var(--accent)}
+.review-checkpoint{font-size:12px;line-height:1.6;color:#435168;padding:11px 12px;border-radius:11px;background:var(--surface2);border:1px solid var(--line);white-space:pre-wrap;margin-top:10px}
+.note-area{width:100%;resize:vertical;min-height:100px;border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--surface2);outline:none;font-size:12px;line-height:1.55}
+.note-hint{font-size:10px;color:var(--muted);margin-top:7px}
+.focus-nav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:18px}
+.footnote{padding:18px 0 0;color:#8490a3;text-align:center;font-size:10px}
+.toast{position:fixed;bottom:24px;right:24px;background:#142033;color:white;border:1px solid #2c3d53;border-radius:12px;padding:12px 16px;box-shadow:var(--shadow);font-size:12px;z-index:50;opacity:0;transform:translateY(8px);pointer-events:none;transition:.2s}
+.toast.show{opacity:1;transform:translateY(0)}
+.mobile-menu{display:none}
+@media(max-width:1150px){
+ .app{grid-template-columns:215px minmax(0,1fr)}.sidebar{padding:20px 12px}.main{padding:0 24px 35px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .two-col{grid-template-columns:1fr}.phase-list{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:760px){
+ .app{display:block}.sidebar{position:relative;height:auto;min-height:auto;padding:12px 15px;gap:11px;z-index:10}.brand{padding:0 2px}.brand-mark{width:34px;height:34px;border-radius:10px}
+ .sidebar-top{display:flex;align-items:center;justify-content:space-between}.sidebar .nav-label,.sidebar-bottom{display:none}.nav{display:flex;overflow-x:auto;gap:5px;padding:3px 0}.nav-btn{font-size:11px;padding:8px 10px;white-space:nowrap;gap:7px}.nav-icon{font-size:14px;width:auto}
+ .main{padding:0 14px 30px}.topbar{height:59px}.today-chip{padding:7px 9px;font-size:10px}.avatar{height:30px;width:30px}
+ main{padding-top:16px}.hero{padding:24px 22px;border-radius:20px}.hero h1{font-size:30px}.hero p{font-size:12px}.stats{gap:9px;margin:13px 0}.stat{padding:13px;border-radius:14px}.stat-num{font-size:24px}.stat-foot{font-size:10px}.stat-head{font-size:10px}.stat-ico{width:26px;height:26px}
+ .section-head{margin:23px 0 11px}.section-head h2{font-size:16px}.section-head p{font-size:11px}.card-pad{padding:16px}.info-grid{grid-template-columns:1fr}.phase-list,.day-grid,.review-grid{grid-template-columns:1fr}.focus-title{font-size:21px}.top-actions{gap:6px}
+ .focus-nav{flex-wrap:wrap}.footnote{text-align:left}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
-
 <body>
-
 <div class="app">
+  <aside class="sidebar">
+    <div class="sidebar-top">
+      <div class="brand">
+        <div class="brand-mark">∑</div>
+        <div><div class="brand-name">DSA Sprint</div><div class="brand-sub">Oct — Dec 2026</div></div>
+      </div>
+    </div>
+    <div>
+      <div class="nav-label">Workspace</div>
+      <nav class="nav" aria-label="Main navigation">
+        <button class="nav-btn active" data-page="overview"><span class="nav-icon">◫</span> Overview</button>
+        <button class="nav-btn" data-page="focus"><span class="nav-icon">◎</span> Focus day</button>
+        <button class="nav-btn" data-page="plan"><span class="nav-icon">☷</span> All 78 days</button>
+        <button class="nav-btn" data-page="reviews"><span class="nav-icon">↻</span> Weekly review</button>
+      </nav>
+    </div>
+    <div class="sidebar-bottom">
+      <div class="side-progress">
+        <div class="side-progress-top"><span>Overall progress</span><b id="sidePercent">0%</b></div>
+        <div class="meter dark"><div class="meter-fill" id="sideMeter"></div></div>
+        <div class="side-caption" id="sideDone">0 of 78 days complete</div>
+      </div>
+      <div class="side-actions">
+        <button class="side-action" id="exportBtn">↗ Export backup</button>
+        <button class="side-action" id="importBtn">↙ Import backup</button>
+        <button class="side-action" id="resetBtn">Reset progress</button>
+        <input id="importFile" type="file" accept="application/json" hidden>
+      </div>
+    </div>
+  </aside>
 
-  <div class="header">
-    <h1>Study 5-Step Tracker</h1>
-    <p>
-      Har chapter ko 5/5 steps complete hone ke baad hi complete mano.
-    </p>
+  <div class="main">
+    <div class="topbar">
+      <div class="breadcrumb"><b id="crumbTitle">Overview</b><span> / </span><span>DSA Sprint</span></div>
+      <div class="top-actions"><div class="today-chip" id="todayChip">● Loading date…</div><div class="avatar" title="Your workspace">DS</div></div>
+    </div>
+
+    <main>
+      <section class="page active" id="page-overview">
+        <div class="hero">
+          <div class="hero-content">
+            <div class="eyebrow"><span class="dot"></span> 78-DAY EXECUTION PLAN</div>
+            <h1>Roz thoda code.<br>December tak solid base.</h1>
+            <p>Videos are only the input. Your real progress is the code you write, the bugs you fix, and the patterns you can explain without notes.</p>
+            <div class="hero-bottom">
+              <button class="btn btn-primary" id="continueBtn">▶ Continue my plan <span>→</span></button>
+              <button class="btn btn-ghost" data-page="plan">View all 78 days</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="stats">
+          <div class="stat"><div class="stat-head"><span>Days completed</span><span class="stat-ico">✓</span></div><div class="stat-num" id="statDone">0<span style="font-size:14px;color:#94a3b8;font-weight:650"> / 78</span></div><div class="stat-foot">Learning + coding + review checked</div></div>
+          <div class="stat"><div class="stat-head"><span>Overall progress</span><span class="stat-ico" style="background:#edf1ff;color:#4c60d9">↗</span></div><div class="stat-num" id="statPercent">0%</div><div class="stat-foot">Track consistency, not perfection</div></div>
+          <div class="stat"><div class="stat-head"><span>Remaining days</span><span class="stat-ico" style="background:#fff7df;color:#a36b07">◷</span></div><div class="stat-num" id="statRemaining">78</div><div class="stat-foot">Until the 31 Dec finish line</div></div>
+          <div class="stat"><div class="stat-head"><span>Daily target</span><span class="stat-ico" style="background:#edf1ff;color:#4c60d9">⌁</span></div><div class="stat-num">3<span style="font-size:14px;color:#94a3b8;font-weight:650"> hrs</span></div><div class="stat-foot">Some advanced days need extra time</div></div>
+        </div>
+
+        <div class="section-head"><div><h2>Your next task</h2><p>Start here. No need to plan the whole year every morning.</p></div><button class="link-btn" data-page="focus">Open focus day →</button></div>
+        <div class="two-col">
+          <div class="card card-pad" id="overviewFocus"></div>
+          <div class="card side-card">
+            <div class="card-header"><div><div class="card-title">Next on your roadmap</div><div class="text-sm muted" style="margin-top:4px">A quick look at the upcoming tasks</div></div><span class="tag blue">Up next</span></div>
+            <div class="quick-list" id="upcomingList"></div>
+            <button class="btn btn-outline" style="width:100%;margin-top:8px" data-page="plan">Explore all tasks →</button>
+          </div>
+        </div>
+        <div class="section-head"><div><h2>Progress by phase</h2><p>Big topics, broken into manageable chunks.</p></div></div>
+        <div class="phase-list" id="phaseList"></div>
+        <div class="footnote">Built for consistent practice · Progress saves in this browser on this device.</div>
+      </section>
+
+      <section class="page" id="page-focus">
+        <div class="section-head" style="margin-top:0"><div><h2 id="focusPageTitle">Focus day</h2><p id="focusPageSub">Your assigned work for the day.</p></div><span class="tag" id="focusPageStatus">IN PROGRESS</span></div>
+        <div id="focusDetail"></div>
+        <div class="footnote">Rule: video dekhna ≠ topic complete. Try first, watch for intuition, then code again from memory.</div>
+      </section>
+
+      <section class="page" id="page-plan">
+        <div class="section-head" style="margin-top:0"><div><h2>All 78 daily tasks</h2><p>Search topics, filter phases, and open any day.</p></div><span class="tag blue">15 Oct – 31 Dec</span></div>
+        <div class="filters">
+          <div class="search-box"><span class="search-icon">⌕</span><input type="search" id="searchInput" placeholder="Search task, topic, algorithm…"></div>
+          <select id="phaseFilter" aria-label="Filter by phase"><option value="">All phases</option></select>
+          <select id="statusFilter" aria-label="Filter by status"><option value="">All statuses</option><option value="not">Not started</option><option value="progress">In progress</option><option value="done">Completed</option></select>
+        </div>
+        <div class="text-sm muted" id="planCount" style="margin-bottom:12px"></div>
+        <div class="day-grid" id="dayGrid"></div>
+        <div class="footnote">Tip: use “Open day” to tick off learning, coding, and review separately.</div>
+      </section>
+
+      <section class="page" id="page-reviews">
+        <div class="section-head" style="margin-top:0"><div><h2>Weekly review</h2><p>Don't let unfinished topics disappear quietly. Review, adjust, continue.</p></div><span class="tag amber">Checkpoints</span></div>
+        <div class="review-grid" id="reviewGrid"></div>
+        <div class="footnote">Weekly check-ins are built from your original day-wise plan. If you fall behind, move the task—don't try to double every next day.</div>
+      </section>
+    </main>
   </div>
-
-
-  <!-- =====================================================
-       1. DATA STRUCTURES
-  ====================================================== -->
-
-  <section class="subject-section">
-
-    <div class="subject-header">
-      <div class="subject-title-area">
-        <span class="subject-code">DS</span>
-
-        <h2>Data Structures</h2>
-
-        <p class="subject-description">
-          Chapter / Lecture tracker
-        </p>
-      </div>
-    </div>
-
-
-    <div class="form">
-
-      <input
-        id="dsChapter"
-        type="text"
-        placeholder="Chapter / Lecture name"
-      />
-
-      <button id="dsStartBtn">
-        Start
-      </button>
-
-    </div>
-
-
-    <div id="dsTracker" class="tracker hidden">
-
-      <div class="tracker-top">
-
-        <div>
-
-          <span class="badge">DS</span>
-
-          <h3
-            id="dsTitle"
-            class="tracker-title"
-          ></h3>
-
-          <div class="tracker-subject">
-            Data Structures
-          </div>
-
-        </div>
-
-        <button
-          id="dsNewBtn"
-          disabled
-        >
-          New Topic
-        </button>
-
-      </div>
-
-
-      <div class="progress-wrap">
-
-        <div class="progress-label">
-          <span>Progress</span>
-          <span id="dsCount">0/5</span>
-        </div>
-
-        <div class="bar">
-          <div
-            id="dsFill"
-            class="fill"
-          ></div>
-        </div>
-
-      </div>
-
-
-      <div
-        id="dsChecks"
-        class="checks"
-      ></div>
-
-
-      <div
-        id="dsComplete"
-        class="complete hidden"
-      >
-        🎉 5/5 complete! Ab next chapter/lecture enter karo.
-      </div>
-
-    </div>
-
-
-    <div class="history">
-
-      <h3>Completed Topics</h3>
-
-      <div
-        id="dsHistory"
-        class="history-list"
-      ></div>
-
-    </div>
-
-  </section>
-
-
-
-  <!-- =====================================================
-       2. DISCRETE MATHEMATICS
-  ====================================================== -->
-
-  <section class="subject-section">
-
-    <div class="subject-header">
-
-      <div class="subject-title-area">
-
-        <span class="subject-code">DM</span>
-
-        <h2>Discrete Mathematics</h2>
-
-        <p class="subject-description">
-          Chapter / Lecture tracker
-        </p>
-
-      </div>
-
-    </div>
-
-
-    <div class="form">
-
-      <input
-        id="dmChapter"
-        type="text"
-        placeholder="Chapter / Lecture name"
-      />
-
-      <button id="dmStartBtn">
-        Start
-      </button>
-
-    </div>
-
-
-    <div
-      id="dmTracker"
-      class="tracker hidden"
-    >
-
-      <div class="tracker-top">
-
-        <div>
-
-          <span class="badge">DM</span>
-
-          <h3
-            id="dmTitle"
-            class="tracker-title"
-          ></h3>
-
-          <div class="tracker-subject">
-            Discrete Mathematics
-          </div>
-
-        </div>
-
-        <button
-          id="dmNewBtn"
-          disabled
-        >
-          New Topic
-        </button>
-
-      </div>
-
-
-      <div class="progress-wrap">
-
-        <div class="progress-label">
-
-          <span>Progress</span>
-
-          <span id="dmCount">
-            0/5
-          </span>
-
-        </div>
-
-        <div class="bar">
-
-          <div
-            id="dmFill"
-            class="fill"
-          ></div>
-
-        </div>
-
-      </div>
-
-
-      <div
-        id="dmChecks"
-        class="checks"
-      ></div>
-
-
-      <div
-        id="dmComplete"
-        class="complete hidden"
-      >
-        🎉 5/5 complete! Ab next chapter/lecture enter karo.
-      </div>
-
-    </div>
-
-
-    <div class="history">
-
-      <h3>Completed Topics</h3>
-
-      <div
-        id="dmHistory"
-        class="history-list"
-      ></div>
-
-    </div>
-
-  </section>
-
-
-
-  <!-- =====================================================
-       3. DIGITAL ELECTRONICS
-  ====================================================== -->
-
-  <section class="subject-section">
-
-    <div class="subject-header">
-
-      <div class="subject-title-area">
-
-        <span class="subject-code">DE</span>
-
-        <h2>Digital Electronics</h2>
-
-        <p class="subject-description">
-          Chapter / Lecture tracker
-        </p>
-
-      </div>
-
-    </div>
-
-
-    <div class="form">
-
-      <input
-        id="deChapter"
-        type="text"
-        placeholder="Chapter / Lecture name"
-      />
-
-      <button id="deStartBtn">
-        Start
-      </button>
-
-    </div>
-
-
-    <div
-      id="deTracker"
-      class="tracker hidden"
-    >
-
-      <div class="tracker-top">
-
-        <div>
-
-          <span class="badge">DE</span>
-
-          <h3
-            id="deTitle"
-            class="tracker-title"
-          ></h3>
-
-          <div class="tracker-subject">
-            Digital Electronics
-          </div>
-
-        </div>
-
-        <button
-          id="deNewBtn"
-          disabled
-        >
-          New Topic
-        </button>
-
-      </div>
-
-
-      <div class="progress-wrap">
-
-        <div class="progress-label">
-
-          <span>Progress</span>
-
-          <span id="deCount">
-            0/5
-          </span>
-
-        </div>
-
-        <div class="bar">
-
-          <div
-            id="deFill"
-            class="fill"
-          ></div>
-
-        </div>
-
-      </div>
-
-
-      <div
-        id="deChecks"
-        class="checks"
-      ></div>
-
-
-      <div
-        id="deComplete"
-        class="complete hidden"
-      >
-        🎉 5/5 complete! Ab next chapter/lecture enter karo.
-      </div>
-
-    </div>
-
-
-    <div class="history">
-
-      <h3>Completed Topics</h3>
-
-      <div
-        id="deHistory"
-        class="history-list"
-      ></div>
-
-    </div>
-
-  </section>
-
 </div>
-
+<div class="toast" role="status" aria-live="polite" id="toast"></div>
 
 <script>
+const DAYS = [{"date": "2026-10-15", "day": 1, "weekday": "Thursday", "phase": "Foundations", "learn": "Complete C++ STL in 1 Video; focus on vector, string, pair, map/unordered_map, set, stack, queue, priority_queue and iterator basics.", "coding": "Write small examples for vector, map, set, stack, queue and priority_queue. Solve 2 easy STL/array exercises.", "hours": 3.0, "review": "", "sourceStatus": "Not started"}, {"date": "2026-10-16", "day": 2, "weekday": "Friday", "phase": "Foundations", "learn": "Basic Maths for DSA video; revise time/space complexity and Euclidean algorithm/GCD idea.", "coding": "Implement GCD, count digits, reverse number and palindrome-number checks. Explain O(1), O(log n), O(n), O(n log n), O(n²).", "hours": 3.0, "review": "", "sourceStatus": "Not started"}, {"date": "2026-10-17", "day": 3, "weekday": "Saturday", "phase": "Foundations", "learn": "Maths playlist: L2 divisors, L3 prime check, L4 prime factors.", "coding": "Code divisors, primality test and prime factorisation. Dry-run each on 2 edge cases.", "hours": 3.0, "review": "", "sourceStatus": "Not started"}, {"date": "2026-10-18", "day": 4, "weekday": "Sunday", "phase": "Foundations", "learn": "Maths playlist: L5 power exponentiation, L6 Sieve of Eratosthenes, L7 prime count in range, L8 SPF.", "coding": "Implement fast power and sieve; do a 30-minute weekly review of STL + maths. If behind, prioritise understanding over completing all 4 videos.", "hours": 3.5, "review": "Weekly checkpoint: explain GCD, sieve and STL containers without notes.", "sourceStatus": "Not started"}, {"date": "2026-10-19", "day": 5, "weekday": "Monday", "phase": "Sorting + Recursion", "learn": "Sorting Part 1: selection sort, bubble sort and insertion sort.", "coding": "Implement all three from memory; record best/average/worst time complexity and stability.", "hours": 3.0, "review": "", "sourceStatus": "Not started"}, {"date": "2026-10-20", "day": 6, "weekday": "Tuesday", "phase": "Sorting + Recursion", "learn": "Merge Sort and Quick Sort: algorithm, dry run, code and complexity.", "coding": "Code merge sort and quick sort. Trace partitioning by hand; explain why merge sort uses extra space.", "hours": 3.5, "review": "", "sourceStatus": "Not started"}, {"date": "2026-10-21", "day": 7, "weekday": "Wednesday", "phase": "Sorting + Recursion", "learn": "Recursion RE1–RE3: introduction/recursion tree/stack space; problems; parameterised vs functional recursion.", "coding": "Code print 1..N, N..1, sum of N numbers and factorial recursively. Draw call stacks.", "hours": 3.0, "review": "", "sourceStatus": "Not started"}, {"date": "2026-10-22", "day": 8, "weekday": "Thursday", "phase": "Sorting + Recursion", "learn": "Recursion RE4–RE5: functional recursion problems and multiple recursion calls.", "coding": "Code reverse-array and palindrome recursion; trace Fibonacci. Solve 2 recursion problems without opening the solution.", "hours": 3.0, "review": "", "sourceStatus": "Not started"}, {"date": "2026-10-23", "day": 9, "weekday": "Friday", "phase": "Hashing", "learn": "Hashing video: maps, time complexity, collisions and division rule of hashing.", "coding": "Use frequency counting on an array/string. Compare map vs unordered_map and explain average vs worst-case lookup.", "hours": 3.0, "review": "", "sourceStatus": "Not started"}, {"date": "2026-10-24", "day": 10, "weekday": "Saturday", "phase": "Arrays", "learn": "• Arrays intro: second-largest element; remove duplicates from sorted array\n• Rotate array by K; union and intersection of sorted arrays; move zeroes to end", "coding": "For each item, code at least one problem from scratch; write brute-force and optimal ideas where relevant. Finish with 2 mixed array problems.", "hours": 3.0, "review": "", "sourceStatus": "Not started"}, {"date": "2026-10-25", "day": 11, "weekday": "Sunday", "phase": "Arrays", "learn": "• Find element appearing once; missing number; maximum consecutive 1s\n• Longest subarray with sum K; generate subarrays\n• Two Sum: brute, better and optimal approaches", "coding": "For each item, code at least one problem from scratch; write brute-force and optimal ideas where relevant. Finish with 2 mixed array problems.", "hours": 3.0, "review": "Weekly checkpoint: re-solve one array problem from scratch; review time complexity.", "sourceStatus": "Not started"}, {"date": "2026-10-26", "day": 12, "weekday": "Monday", "phase": "Arrays", "learn": "• Sort array of 0s, 1s and 2s (Dutch National Flag)\n• Majority Element I; Moore’s Voting Algorithm\n• Kadane’s Algorithm: maximum subarray sum and print subarray", "coding": "For each item, code at least one problem from scratch; write brute-force and optimal ideas where relevant. Finish with 2 mixed array problems.", "hours": 3.0, "review": "", "sourceStatus": "Not started"}, {"date": "2026-10-27", "day": 13, "weekday": "Tuesday", "phase": "Arrays", "learn": "• Best Time to Buy and Sell Stock\n• Rearrange array elements by sign (both variants)\n• Next Permutation", "coding": "For each item, code at least one problem from scratch; write brute-force and optimal ideas where relevant. Finish with 2 mixed array problems.", "hours": 3.0, "review": "", "sourceStatus": "Not started"}, {"date": "2026-10-28", "day": 14, "weekday": "Wednesday", "phase": "Arrays", "learn": "• Leaders in an array\n• Longest Consecutive Sequence\n• Set Matrix Zeroes, including O(1)-space approach\n• Rotate matrix/image by 90 degrees", "coding": "For each item, code at least one problem from scratch; write brute-force and optimal ideas where relevant. Prioritise correct dry-runs and complexity analysis.", "hours": 3.5, "review": "", "sourceStatus": "Not started"}, {"date": "2026-10-29", "day": 15, "weekday": "Thursday", "phase": "Arrays", "learn": "• Spiral matrix traversal\n• Count subarrays with sum K\n• Pascal Triangle / nCr\n• Majority Element II", "coding": "For each item, code at least one problem from scratch; write brute-force and optimal ideas where relevant. Prioritise correct dry-runs and complexity analysis.", "hours": 3.5, "review": "", "sourceStatus": "Not started"}, {"date": "2026-10-30", "day": 16, "weekday": "Friday", "phase": "Arrays", "learn": "• 3 Sum\n• 4 Sum\n• Number of subarrays with XOR K", "coding": "For each item, code at least one problem from scratch; write brute-force and optimal ideas where relevant. Finish with 2 mixed array problems.", "hours": 3.0, "review": "", "sourceStatus": "Not started"}, {"date": "2026-10-31", "day": 17, "weekday": "Saturday", "phase": "Arrays", "learn": "• Merge overlapping intervals\n• Merge sorted arrays without extra space\n• Missing and Repeating Number", "coding": "For each item, code at least one problem from scratch; write brute-force and optimal ideas where relevant. Finish with 2 mixed array problems.", "hours": 3.0, "review": "", "sourceStatus": "Not started"}, {"date": "2026-11-01", "day": 18, "weekday": "Sunday", "phase": "Arrays", "learn": "• Count inversions in an array\n• Reverse Pairs\n• Maximum Product Subarray", "coding": "For each item, code at least one problem from scratch; write brute-force and optimal ideas where relevant. Finish with 2 mixed array problems.", "hours": 3.0, "review": "Weekly checkpoint: 45-minute mixed array test; log mistakes and retry one failed problem.", "sourceStatus": "Not started"}, {"date": "2026-11-02", "day": 19, "weekday": "Monday", "phase": "Binary Search", "learn": "• BS-1 Binary Search intro; iterative/recursive versions; overflow cases\n• BS-2 Lower/upper bound; search insert position; floor and ceil\n• BS-3 First/last occurrence; count occurrences", "coding": "Implement the template and dry-run boundary cases. For search-on-answer problems, clearly define the search range and feasibility check.", "hours": 3.0, "review": "", "sourceStatus": "Not started"}, {"date": "2026-11-03", "day": 20, "weekday": "Tuesday", "phase": "Binary Search", "learn": "• BS-4 Search in rotated sorted array I\n• BS-5 Search in rotated sorted array II\n• BS-6 Minimum in rotated sorted array", "coding": "Implement the template and dry-run boundary cases. For search-on-answer problems, clearly define the search range and feasibility check.", "hours": 3.0, "review": "", "sourceStatus": "Not started"}, {"date": "2026-11-04", "day": 21, "weekday": "Wednesday", "phase": "Binary Search", "learn": "• BS-7 Count rotations in a sorted array\n• BS-8 Single element in sorted array\n• BS-9 Find peak element", "coding": "Implement the template and dry-run boundary cases. For search-on-answer problems, clearly define the search range and feasibility check.", "hours": 3.0, "review": "", "sourceStatus": "Not started"}, {"date": "2026-11-05", "day": 22, "weekday": "Thursday", "phase": "Binary Search", "learn": "• BS-10 Square root using binary search\n• BS-11 Nth root of an integer\n• BS-12 Koko Eating Bananas", "coding": "Implement the template and dry-run boundary cases. For search-on-answer problems, clearly define the search range and feasibility check.", "hours": 3.0, "review": "", "sourceStatus": "Not started"}, {"date": "2026-11-06", "day": 23, "weekday": "Friday", "phase": "Binary Search", "learn": "• BS-13 Minimum days to make M bouquets\n• BS-14 Smallest divisor given a threshold\n• BS-15 Capacity to ship packages within D days", "coding": "Implement the template and dry-run boundary cases. For search-on-answer problems, clearly define the search range and feasibility check.", "hours": 3.0, "review": "", "sourceStatus": "Not started"}, {"date": "2026-11-07", "day": 24, "weekday": "Saturday", "phase": "Binary Search", "learn": "• BS-16 K-th missing positive number\n• BS-17 Aggressive Cows\n• BS-18 Allocate Books / Book Allocation", "coding": "Implement the template and dry-run boundary cases. For search-on-answer problems, clearly define the search range and feasibility check.", "hours": 3.0, "review": "", "sourceStatus": "Not started"}, {"date": "2026-11-08", "day": 25, "weekday": "Sunday", "phase": "Binary Search", "learn": "• BS-19 Painter’s Partition / Split Array Largest Sum\n• BS-20 Minimise maximum distance between gas stations\n• BS-21 Median of two sorted arrays: brute and better", "coding": "Implement the template and dry-run boundary cases. For search-on-answer problems, clearly define the search range and feasibility check.", "hours": 3.0, "review": "Weekly checkpoint: redo lower/upper bound + one search-on-answer problem without notes.", "sourceStatus": "Not started"}, {"date": "2026-11-09", "day": 26, "weekday": "Monday", "phase": "Binary Search", "learn": "• BS-21 Median of two sorted arrays: binary-search approach\n• BS-22 K-th element of two sorted arrays\n• BS-23 Row with maximum number of 1s", "coding": "Implement the template and dry-run boundary cases. For search-on-answer problems, clearly define the search range and feasibility check.", "hours": 3.0, "review": "", "sourceStatus": "Not started"}, {"date": "2026-11-10", "day": 27, "weekday": "Tuesday", "phase": "Binary Search", "learn": "• BS-24 Search in a 2D Matrix I\n• BS-25 Search in a 2D Matrix II\n• BS-26 Find peak element in 2D matrix\n• BS-27 Median in a row-wise sorted matrix", "coding": "Implement the template and dry-run boundary cases. For search-on-answer problems, clearly define the search range and feasibility check.", "hours": 3.5, "review": "", "sourceStatus": "Not started"}, {"date": "2026-11-11", "day": 28, "weekday": "Wednesday", "phase": "Linked Lists", "learn": "• LL L1 Introduction to Linked List: traversal, length, search\n• LL L2 Deletion/insertion in singly linked list (8 problems)\n• LL L3 Doubly Linked List: introduction, insertion and deletion\n• LL L4 Reverse a doubly linked list\n• LL L5 Add two numbers represented by linked lists\n• LL L6 Odd-even linked list", "coding": "Draw pointer diagrams before coding. Test empty list, one node, two nodes and duplicate values; implement core operations independently.", "hours": 3.5, "review": "", "sourceStatus": "Not started"}, {"date": "2026-11-12", "day": 29, "weekday": "Thursday", "phase": "Linked Lists", "learn": "• LL L7 Sort linked list of 0s, 1s and 2s\n• LL L8 Remove Nth node from end\n• LL L9 Reverse linked list: iterative and recursive\n• LL L10 Check whether linked list is palindrome\n• LL L11 Add 1 to number represented by linked list\n• LL L12 Intersection point of Y-shaped linked lists", "coding": "Draw pointer diagrams before coding. Test empty list, one node, two nodes and duplicate values; implement core operations independently.", "hours": 3.5, "review": "", "sourceStatus": "Not started"}, {"date": "2026-11-13", "day": 30, "weekday": "Friday", "phase": "Linked Lists", "learn": "• LL L13 Find middle element\n• LL L14 Detect cycle (Floyd’s algorithm)\n• LL L15 Find length of loop\n• LL L16 Delete middle node\n• LL L17 Find starting point of loop\n• LL L18 Delete all occurrences of a key in DLL", "coding": "Draw pointer diagrams before coding. Test empty list, one node, two nodes and duplicate values; implement core operations independently.", "hours": 3.5, "review": "", "sourceStatus": "Not started"}, {"date": "2026-11-14", "day": 31, "weekday": "Saturday", "phase": "Linked Lists", "learn": "• LL L19 Find all pairs with given sum in DLL\n• LL L20 Remove duplicates from sorted DLL\n• LL L21 Reverse nodes in groups of K\n• LL L22 Rotate a linked list\n• LL L23 Merge two sorted linked lists\n• LL L24 Flatten a linked list", "coding": "Draw pointer diagrams before coding. Test empty list, one node, two nodes and duplicate values; implement core operations independently.", "hours": 3.5, "review": "", "sourceStatus": "Not started"}, {"date": "2026-11-15", "day": 32, "weekday": "Sunday", "phase": "Linked Lists", "learn": "• LL L25 Merge K sorted lists\n• LL L26 Sort a linked list using merge sort\n• LL L27 Clone linked list with random pointers\n• LL L28 Design browser history using linked list", "coding": "Draw pointer diagrams before coding. Test empty list, one node, two nodes and duplicate values; implement core operations independently.", "hours": 3.0, "review": "Weekly checkpoint: implement reversal and cycle detection from scratch; check all pointer edge cases.", "sourceStatus": "Not started"}, {"date": "2026-11-16", "day": 33, "weekday": "Monday", "phase": "Stacks & Queues", "learn": "• Stacks/Queues L1: introduction and implementations using data structures\n• Stacks/Queues L2: balanced parentheses\n• Stacks/Queues L3: prefix, infix and postfix conversion\n• Stacks/Queues L4: implement Min Stack", "coding": "Implement stack and queue, then trace push/pop order. For monotonic-stack problems, state what the stack represents and why each index is removed.", "hours": 3.0, "review": "", "sourceStatus": "Not started"}, {"date": "2026-11-17", "day": 34, "weekday": "Tuesday", "phase": "Stacks & Queues", "learn": "• Stacks/Queues L5: Next Greater Element\n• Stacks/Queues L6: Next Greater Element II\n• Stacks/Queues L7: Previous Smaller Element\n• Stacks/Queues L8: Trapping Rainwater (two approaches)\n• Stacks/Queues L9: Sum of subarray minimums", "coding": "Implement stack and queue, then trace push/pop order. For monotonic-stack problems, state what the stack represents and why each index is removed.", "hours": 3.5, "review": "", "sourceStatus": "Not started"}, {"date": "2026-11-18", "day": 35, "weekday": "Wednesday", "phase": "Stacks & Queues", "learn": "• Stacks/Queues L10: Sum of subarray ranges\n• Stacks/Queues L11: Asteroid Collisions\n• Stacks/Queues L12: Largest Rectangle in Histogram\n• Stacks/Queues L13: Maximal Rectangle\n• Stacks/Queues L14: Remove K Digits", "coding": "Implement stack and queue, then trace push/pop order. For monotonic-stack problems, state what the stack represents and why each index is removed.", "hours": 3.5, "review": "", "sourceStatus": "Not started"}, {"date": "2026-11-19", "day": 36, "weekday": "Thursday", "phase": "Stacks & Queues", "learn": "• Stacks/Queues L15: Stock Span Problem\n• Stacks/Queues L16: Sliding Window Maximum\n• Stacks/Queues L17: Celebrity Problem\n• Stacks/Queues L18: Implement LRU Cache\n• Implement LFU Cache", "coding": "Implement stack and queue, then trace push/pop order. For monotonic-stack problems, state what the stack represents and why each index is removed.", "hours": 3.5, "review": "", "sourceStatus": "Not started"}, {"date": "2026-11-20", "day": 37, "weekday": "Friday", "phase": "Sliding Window & Two Pointers", "learn": "• Sliding Window L1: patterns/templates for two pointers and sliding window\n• Sliding Window L2: Maximum Points You Can Obtain from Cards\n• Sliding Window L3: Longest Substring Without Repeating Characters\n• Sliding Window L4: Max Consecutive Ones III", "coding": "Code each day’s first problem, and dry-run the remaining patterns. Focus on window invariant and why a left pointer moves.", "hours": 3.0, "review": "", "sourceStatus": "Not started"}, {"date": "2026-11-21", "day": 38, "weekday": "Saturday", "phase": "Sliding Window & Two Pointers", "learn": "• Sliding Window L5: Fruit Into Baskets\n• Sliding Window L6: Longest Substring with at most K distinct characters\n• Sliding Window L7: Number of substrings containing all three characters\n• Sliding Window L8: Longest Repeating Character Replacement", "coding": "Code each day’s first problem, and dry-run the remaining patterns. Focus on window invariant and why a left pointer moves.", "hours": 3.0, "review": "", "sourceStatus": "Not started"}, {"date": "2026-11-22", "day": 39, "weekday": "Sunday", "phase": "Sliding Window & Two Pointers", "learn": "• Sliding Window L9: Binary Subarrays With Sum\n• Sliding Window L10: Count Nice Subarrays\n• Sliding Window L11: Subarrays with K different integers\n• Sliding Window L12: Minimum Window Substring", "coding": "Code each day’s first problem, and dry-run the remaining patterns. Focus on window invariant and why a left pointer moves.", "hours": 3.0, "review": "Weekly checkpoint: choose one fixed-window and one variable-window problem; explain when the window expands/shrinks.", "sourceStatus": "Not started"}, {"date": "2026-11-23", "day": 40, "weekday": "Monday", "phase": "Greedy", "learn": "• Greedy L1: Assign Cookies\n• Greedy L2: Lemonade Change\n• Greedy L3: Shortest Job First scheduling\n• Greedy L4: Jump Game I", "coding": "For every greedy choice, write why it is locally safe and test a counterexample. Code 1–2 problems and dry-run the rest.", "hours": 3.0, "review": "", "sourceStatus": "Not started"}, {"date": "2026-11-24", "day": 41, "weekday": "Tuesday", "phase": "Greedy", "learn": "• Greedy L5: Jump Game II\n• Greedy L6: Job Sequencing Problem\n• Greedy L7: N Meetings in One Room\n• Greedy L8: Non-overlapping Intervals", "coding": "For every greedy choice, write why it is locally safe and test a counterexample. Code 1–2 problems and dry-run the rest.", "hours": 3.0, "review": "", "sourceStatus": "Not started"}, {"date": "2026-11-25", "day": 42, "weekday": "Wednesday", "phase": "Greedy", "learn": "• Greedy L9: Insert Intervals\n• Greedy L10: Minimum railway platforms\n• Greedy L11: Valid Parenthesis String\n• Greedy L12: Candy (slope approach)\n• Greedy L13: Fractional Knapsack", "coding": "For every greedy choice, write why it is locally safe and test a counterexample. Code 1–2 problems and dry-run the rest.", "hours": 3.5, "review": "", "sourceStatus": "Not started"}, {"date": "2026-11-26", "day": 43, "weekday": "Thursday", "phase": "Trees + BST", "learn": "• L1 Introduction to trees/types\n• L2 Binary tree representation in C++\n• L3 Binary tree representation in Java (skim; focus on concept)\n• L4 Binary tree traversals: BFS/DFS\n• L5 Preorder traversal\n• L6 Inorder traversal", "coding": "Prioritise coding traversals, height, balanced tree, diameter, LCA and BST operations. For advanced variants, understand pattern and dry-run carefully.", "hours": 3.5, "review": "", "sourceStatus": "Not started"}, {"date": "2026-11-27", "day": 44, "weekday": "Friday", "phase": "Trees + BST", "learn": "• L7 Postorder traversal\n• L8 Level order traversal\n• L9 Iterative preorder\n• L10 Iterative inorder\n• L11 Iterative postorder using 2 stacks\n• L12 Iterative postorder using 1 stack", "coding": "Prioritise coding traversals, height, balanced tree, diameter, LCA and BST operations. For advanced variants, understand pattern and dry-run carefully.", "hours": 3.5, "review": "", "sourceStatus": "Not started"}, {"date": "2026-11-28", "day": 45, "weekday": "Saturday", "phase": "Trees + BST", "learn": "• L13 Preorder/inorder/postorder in one traversal\n• L14 Maximum depth/height\n• L15 Balanced binary tree\n• L16 Diameter of binary tree\n• L17 Maximum path sum\n• L18 Identical trees", "coding": "Prioritise coding traversals, height, balanced tree, diameter, LCA and BST operations. For advanced variants, understand pattern and dry-run carefully.", "hours": 3.5, "review": "", "sourceStatus": "Not started"}, {"date": "2026-11-29", "day": 46, "weekday": "Sunday", "phase": "Trees + BST", "learn": "• L19 Zig-zag traversal\n• L20 Boundary traversal\n• L21 Vertical order traversal\n• L22 Top view\n• L23 Bottom view\n• L24 Right/left view", "coding": "Prioritise coding traversals, height, balanced tree, diameter, LCA and BST operations. For advanced variants, understand pattern and dry-run carefully.", "hours": 3.5, "review": "Weekly checkpoint: implement recursive traversals + level-order traversal; review recursion/base cases.", "sourceStatus": "Not started"}, {"date": "2026-11-30", "day": 47, "weekday": "Monday", "phase": "Trees + BST", "learn": "• L25 Symmetric tree\n• L26 Root-to-node path\n• L27 Lowest common ancestor in binary tree\n• L28 Maximum width\n• L29 Children sum property\n• L30 Nodes at distance K", "coding": "Prioritise coding traversals, height, balanced tree, diameter, LCA and BST operations. For advanced variants, understand pattern and dry-run carefully.", "hours": 3.5, "review": "", "sourceStatus": "Not started"}, {"date": "2026-12-01", "day": 48, "weekday": "Tuesday", "phase": "Trees + BST", "learn": "• L31 Burn binary tree from a node\n• L32 Count nodes in complete binary tree\n• L33 Build unique tree: requirements\n• L34 Construct tree from preorder + inorder\n• L35 Construct tree from postorder + inorder\n• L36 Serialize/de-serialize tree", "coding": "Prioritise coding traversals, height, balanced tree, diameter, LCA and BST operations. For advanced variants, understand pattern and dry-run carefully.", "hours": 3.5, "review": "", "sourceStatus": "Not started"}, {"date": "2026-12-02", "day": 49, "weekday": "Wednesday", "phase": "Trees + BST", "learn": "• L37 Morris traversal\n• L38 Flatten binary tree to linked list\n• L39 Introduction to BST\n• L40 Search in BST\n• L41 Ceil in BST\n• L42 Floor in BST", "coding": "Prioritise coding traversals, height, balanced tree, diameter, LCA and BST operations. For advanced variants, understand pattern and dry-run carefully.", "hours": 3.5, "review": "", "sourceStatus": "Not started"}, {"date": "2026-12-03", "day": 50, "weekday": "Thursday", "phase": "Trees + BST", "learn": "• L43 Insert in BST\n• L44 Delete node in BST\n• L45 Kth smallest/largest in BST\n• L46 Validate BST\n• L47 LCA in BST\n• L48 Construct BST from preorder", "coding": "Prioritise coding traversals, height, balanced tree, diameter, LCA and BST operations. For advanced variants, understand pattern and dry-run carefully.", "hours": 3.5, "review": "", "sourceStatus": "Not started"}, {"date": "2026-12-04", "day": 51, "weekday": "Friday", "phase": "Trees + BST", "learn": "• L49 Inorder successor/predecessor\n• L50 BST iterator\n• L51 Two Sum in BST\n• L52 Recover BST\n• L53 Largest BST in binary tree", "coding": "Prioritise coding traversals, height, balanced tree, diameter, LCA and BST operations. For advanced variants, understand pattern and dry-run carefully.", "hours": 3.0, "review": "", "sourceStatus": "Not started"}, {"date": "2026-12-05", "day": 52, "weekday": "Saturday", "phase": "Graphs", "learn": "• G1 Introduction to graphs/types\n• G2 Graph representation in C++\n• G3 Graph representation in Java (skim; focus on representation)\n• G4 Connected components\n• G5 BFS\n• G6 DFS", "coding": "Code at least one representative algorithm. Keep a table of prerequisites, use case, and complexity for every algorithm; on heavy days, prioritise understanding over copying code.", "hours": 3.5, "review": "", "sourceStatus": "Not started"}, {"date": "2026-12-06", "day": 53, "weekday": "Sunday", "phase": "Graphs", "learn": "• G7 Number of Provinces\n• G8 Number of Islands\n• G9 Flood Fill\n• G10 Rotten Oranges\n• G11 Cycle detection in undirected graph using BFS\n• G12 Cycle detection in undirected graph using DFS", "coding": "Code at least one representative algorithm. Keep a table of prerequisites, use case, and complexity for every algorithm; on heavy days, prioritise understanding over copying code.", "hours": 3.5, "review": "Weekly checkpoint: implement BFS + DFS and identify connected components. Revisit adjacency-list representation.", "sourceStatus": "Not started"}, {"date": "2026-12-07", "day": 54, "weekday": "Monday", "phase": "Graphs", "learn": "• G13 Distance of nearest cell having 1\n• G14 Surrounded Regions\n• G15 Number of Enclaves\n• G16 Number of Distinct Islands\n• G17 Bipartite graph using BFS\n• G18 Bipartite graph using DFS", "coding": "Code at least one representative algorithm. Keep a table of prerequisites, use case, and complexity for every algorithm; on heavy days, prioritise understanding over copying code.", "hours": 3.5, "review": "", "sourceStatus": "Not started"}, {"date": "2026-12-08", "day": 55, "weekday": "Tuesday", "phase": "Graphs", "learn": "• G19 Cycle detection in directed graph using DFS\n• G20 Eventual Safe States using DFS\n• G21 Topological sort using DFS\n• G22 Kahn’s topological sort\n• G23 Directed cycle detection using Kahn’s algorithm\n• G24 Course Schedule I/II", "coding": "Code at least one representative algorithm. Keep a table of prerequisites, use case, and complexity for every algorithm; on heavy days, prioritise understanding over copying code.", "hours": 3.5, "review": "", "sourceStatus": "Not started"}, {"date": "2026-12-09", "day": 56, "weekday": "Wednesday", "phase": "Graphs", "learn": "• G25 Eventual Safe States using BFS/topological sort\n• G26 Alien Dictionary\n• G27 Shortest path in DAG\n• G28 Shortest path in undirected graph with unit weights\n• G29 Word Ladder I\n• G30 Word Ladder II", "coding": "Code at least one representative algorithm. Keep a table of prerequisites, use case, and complexity for every algorithm; on heavy days, prioritise understanding over copying code.", "hours": 3.5, "review": "", "sourceStatus": "Not started"}, {"date": "2026-12-10", "day": 57, "weekday": "Thursday", "phase": "Graphs", "learn": "• G31 Word Ladder II: optimised approach\n• G32 Dijkstra using priority queue\n• G33 Dijkstra using set\n• G34 Dijkstra intuition + complexity\n• G35 Print shortest path using Dijkstra\n• G36 Shortest Distance in Binary Maze", "coding": "Code at least one representative algorithm. Keep a table of prerequisites, use case, and complexity for every algorithm; on heavy days, prioritise understanding over copying code.", "hours": 3.5, "review": "", "sourceStatus": "Not started"}, {"date": "2026-12-11", "day": 58, "weekday": "Friday", "phase": "Graphs", "learn": "• G37 Path With Minimum Effort\n• G38 Cheapest Flights Within K Stops\n• G39 Minimum Multiplications to Reach End\n• G40 Number of Ways to Arrive at Destination\n• G41 Bellman-Ford\n• G42 Floyd-Warshall", "coding": "Code at least one representative algorithm. Keep a table of prerequisites, use case, and complexity for every algorithm; on heavy days, prioritise understanding over copying code.", "hours": 3.5, "review": "", "sourceStatus": "Not started"}, {"date": "2026-12-12", "day": 59, "weekday": "Saturday", "phase": "Graphs", "learn": "• G43 City with smallest number of neighbours at threshold distance\n• G44 Minimum spanning tree theory\n• G45 Prim’s algorithm\n• G46 Disjoint Set Union: union by rank/size/path compression\n• G47 Kruskal’s algorithm\n• G48 Number of Provinces using DSU", "coding": "Code at least one representative algorithm. Keep a table of prerequisites, use case, and complexity for every algorithm; on heavy days, prioritise understanding over copying code.", "hours": 3.5, "review": "", "sourceStatus": "Not started"}, {"date": "2026-12-13", "day": 60, "weekday": "Sunday", "phase": "Graphs", "learn": "• G49 Operations to Make Network Connected\n• G50 Accounts Merge using DSU\n• G51 Number of Islands II using DSU\n• G52 Making a Large Island using DSU\n• G53 Most Stones Removed with Same Row/Column\n• G54 Kosaraju strongly connected components\n• G55 Bridges using Tarjan’s algorithm\n• G56 Articulation Point", "coding": "Code at least one representative algorithm. Keep a table of prerequisites, use case, and complexity for every algorithm; on heavy days, prioritise understanding over copying code.", "hours": 4.0, "review": "Weekly checkpoint: make a one-page graph algorithm map: traversal, cycles, topological order, shortest paths, MST, DSU, SCC/bridges.", "sourceStatus": "Not started"}, {"date": "2026-12-14", "day": 61, "weekday": "Monday", "phase": "Dynamic Programming", "learn": "• DP1 Intro: memoization, tabulation, space optimisation\n• DP2 Climbing Stairs\n• DP3 Frog Jump\n• DP4 Frog Jump with K distance\n• DP5 Maximum sum of non-adjacent elements", "coding": "For each pattern, write (1) state, (2) recurrence, (3) base cases, (4) memoisation, (5) tabulation, (6) space optimisation. Code 1 key problem; dry-run the rest.", "hours": 3.5, "review": "", "sourceStatus": "Not started"}, {"date": "2026-12-15", "day": 62, "weekday": "Tuesday", "phase": "Dynamic Programming", "learn": "• DP6 House Robber II\n• DP7 Ninja’s Training / 2D DP\n• DP8 Unique Paths\n• DP9 Unique Paths II\n• DP10 Minimum Path Sum in Grid", "coding": "For each pattern, write (1) state, (2) recurrence, (3) base cases, (4) memoisation, (5) tabulation, (6) space optimisation. Code 1 key problem; dry-run the rest.", "hours": 3.5, "review": "", "sourceStatus": "Not started"}, {"date": "2026-12-16", "day": 63, "weekday": "Wednesday", "phase": "Dynamic Programming", "learn": "• DP11 Triangle minimum path\n• DP12 Minimum/Maximum Falling Path Sum\n• DP13 Cherry Pickup II (3D DP)\n• DP14 Subset Sum\n• DP15 Partition Equal Subset Sum", "coding": "For each pattern, write (1) state, (2) recurrence, (3) base cases, (4) memoisation, (5) tabulation, (6) space optimisation. Code 1 key problem; dry-run the rest.", "hours": 3.5, "review": "", "sourceStatus": "Not started"}, {"date": "2026-12-17", "day": 64, "weekday": "Thursday", "phase": "Dynamic Programming", "learn": "• DP16 Partition into two subsets with minimum sum difference\n• DP17 Count subsets with sum K\n• DP18 Count partitions with given difference\n• DP19 0/1 Knapsack\n• DP20 Minimum Coins", "coding": "For each pattern, write (1) state, (2) recurrence, (3) base cases, (4) memoisation, (5) tabulation, (6) space optimisation. Code 1 key problem; dry-run the rest.", "hours": 3.5, "review": "", "sourceStatus": "Not started"}, {"date": "2026-12-18", "day": 65, "weekday": "Friday", "phase": "Dynamic Programming", "learn": "• DP21 Target Sum\n• DP22 Coin Change 2\n• DP23 Unbounded Knapsack\n• DP24 Rod Cutting\n• DP25 Longest Common Subsequence", "coding": "For each pattern, write (1) state, (2) recurrence, (3) base cases, (4) memoisation, (5) tabulation, (6) space optimisation. Code 1 key problem; dry-run the rest.", "hours": 3.5, "review": "", "sourceStatus": "Not started"}, {"date": "2026-12-19", "day": 66, "weekday": "Saturday", "phase": "Dynamic Programming", "learn": "• DP26 Print LCS\n• DP27 Longest Common Substring\n• DP28 Longest Palindromic Subsequence\n• DP29 Minimum insertions to make palindrome\n• DP30 Minimum insertions/deletions to convert strings", "coding": "For each pattern, write (1) state, (2) recurrence, (3) base cases, (4) memoisation, (5) tabulation, (6) space optimisation. Code 1 key problem; dry-run the rest.", "hours": 3.5, "review": "", "sourceStatus": "Not started"}, {"date": "2026-12-20", "day": 67, "weekday": "Sunday", "phase": "Dynamic Programming", "learn": "• DP31 Shortest Common Supersequence\n• DP32 Distinct Subsequences\n• DP33 Edit Distance\n• DP34 Wildcard Matching", "coding": "For each pattern, write (1) state, (2) recurrence, (3) base cases, (4) memoisation, (5) tabulation, (6) space optimisation. Code 1 key problem; dry-run the rest.", "hours": 3.5, "review": "Weekly checkpoint: explain state, transition, base case and iteration order for one 1D and one grid DP problem.", "sourceStatus": "Not started"}, {"date": "2026-12-21", "day": 68, "weekday": "Monday", "phase": "Dynamic Programming", "learn": "• DP36 Buy/Sell Stock II\n• DP37 Buy/Sell Stocks III\n• DP38 Buy/Sell Stocks IV\n• DP39 Buy/Sell Stocks with Cooldown\n• DP40 Buy/Sell Stocks with Transaction Fee", "coding": "For each pattern, write (1) state, (2) recurrence, (3) base cases, (4) memoisation, (5) tabulation, (6) space optimisation. Code 1 key problem; dry-run the rest.", "hours": 3.5, "review": "", "sourceStatus": "Not started"}, {"date": "2026-12-22", "day": 69, "weekday": "Tuesday", "phase": "Dynamic Programming", "learn": "• DP41 Longest Increasing Subsequence\n• DP42 Print LIS\n• DP43 LIS using binary search\n• DP44 Largest Divisible Subset\n• DP45 Longest String Chain", "coding": "For each pattern, write (1) state, (2) recurrence, (3) base cases, (4) memoisation, (5) tabulation, (6) space optimisation. Code 1 key problem; dry-run the rest.", "hours": 3.5, "review": "", "sourceStatus": "Not started"}, {"date": "2026-12-23", "day": 70, "weekday": "Wednesday", "phase": "Dynamic Programming", "learn": "• DP46 Longest Bitonic Subsequence\n• DP47 Number of LIS\n• DP48 Matrix Chain Multiplication (recursive)\n• DP49 Matrix Chain Multiplication (tabulation)\n• DP50 Minimum Cost to Cut the Stick", "coding": "For each pattern, write (1) state, (2) recurrence, (3) base cases, (4) memoisation, (5) tabulation, (6) space optimisation. Code 1 key problem; dry-run the rest.", "hours": 3.5, "review": "", "sourceStatus": "Not started"}, {"date": "2026-12-24", "day": 71, "weekday": "Thursday", "phase": "Dynamic Programming", "learn": "• DP51 Burst Balloons\n• DP52 Evaluate Boolean Expression to True\n• DP53 Palindrome Partitioning II\n• DP54 Partition Array for Maximum Sum\n• DP55 Maximum Rectangle with all 1s\n• DP56 Count square submatrices with all 1s", "coding": "For each pattern, write (1) state, (2) recurrence, (3) base cases, (4) memoisation, (5) tabulation, (6) space optimisation. Code 1 key problem; dry-run the rest.", "hours": 4.0, "review": "", "sourceStatus": "Not started"}, {"date": "2026-12-25", "day": 72, "weekday": "Friday", "phase": "Missing core topics", "learn": "Strings (basic/medium): frequency, palindrome, anagram, two pointers, substring patterns. These lessons are not in your pasted list.", "coding": "Implement palindrome, valid anagram, longest common prefix and one substring problem. Use the official A2Z sheet link on the Resources tab.", "hours": 3.0, "review": "", "sourceStatus": "Not started"}, {"date": "2026-12-26", "day": 73, "weekday": "Saturday", "phase": "Missing core topics", "learn": "Bit manipulation: AND/OR/XOR, shifts, checking/setting/unsetting bits, power of two, bit masks.", "coding": "Implement odd/even using bits, count set bits, single number using XOR and power-of-two check. Revise XOR patterns.", "hours": 3.0, "review": "", "sourceStatus": "Not started"}, {"date": "2026-12-27", "day": 74, "weekday": "Sunday", "phase": "Missing core topics", "learn": "Heaps / priority queues: min-heap vs max-heap, push/pop/top, heapify, top-K and Kth-largest patterns.", "coding": "Use C++ priority_queue; solve Kth-largest and merge-K-sorted-list style dry run. Weekly checkpoint: revisit the hardest 3 mistakes.", "hours": 3.0, "review": "Weekly checkpoint: revisit the hardest 3 mistakes from the whole course.", "sourceStatus": "Not started"}, {"date": "2026-12-28", "day": 75, "weekday": "Monday", "phase": "Missing core topics", "learn": "Tries + advanced strings: trie insert/search/startsWith; know what KMP/Z-function are used for at a high level.", "coding": "Implement a basic trie (insert/search/startsWith). Mark advanced string algorithms for follow-up if not mastered.", "hours": 3.0, "review": "", "sourceStatus": "Not started"}, {"date": "2026-12-29", "day": 76, "weekday": "Tuesday", "phase": "Final revision", "learn": "Mixed arrays + binary search + hashing + recursion: no new videos.", "coding": "Timed set: 3 problems (one array pattern, one binary search, one recursion/hash). After the attempt, review solutions and log the exact reason for each mistake.", "hours": 3.0, "review": "", "sourceStatus": "Not started"}, {"date": "2026-12-30", "day": 77, "weekday": "Wednesday", "phase": "Final revision", "learn": "Mixed linked list + stack/queue + sliding window + greedy + trees/graphs patterns: no new videos.", "coding": "Timed set: 2 medium problems. Explain time/space complexity aloud; re-implement one tree traversal and BFS/DFS from memory.", "hours": 3.5, "review": "", "sourceStatus": "Not started"}, {"date": "2026-12-31", "day": 78, "weekday": "Thursday", "phase": "Final revision", "learn": "Final checkpoint: review notes, complexity sheet, templates and all unsolved/error-log problems.", "coding": "Take a 90-minute mixed DSA mock (4 problems). Label each topic Green / Yellow / Red. “Finished” means all planned lessons attempted, selected problems coded, and weak areas logged—not that all 400+ sheet problems are mastered.", "hours": 3.0, "review": "Final checkpoint: create a January plan based on Red/Yellow topics.", "sourceStatus": "Not started"}];
+const STORE_KEY = "dsa-sprint-progress-v1";
+const phases = [...new Set(DAYS.map(d => d.phase))];
+const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+let activePage = "overview";
+let searchValue = "";
+let phaseValue = "";
+let statusValue = "";
+let toastTimer = null;
+let state = loadState();
+let selectedDay = chooseInitialDay();
 
-/* =========================================================
-   COMMON 5-STEP WORKFLOW
-========================================================= */
-
-const workflows = {
-
-  ds: [
-    "GPT — Preview + Topics",
-    "NPTEL — Lecture",
-    "Obsidian — Notes Writing",
-    "GPT — Doubt Clearing",
-    "Practice — Questions / PYQs"
-  ],
-
-  dm: [
-    "GPT — Preview + Topics",
-    "NPTEL — Lecture",
-    "Obsidian — Notes Writing",
-    "GPT — Doubt Clearing",
-    "Practice — Questions / PYQs"
-  ],
-
-  de: [
-    "GPT — Preview + Topics",
-    "NPTEL — Lecture",
-    "Obsidian — Notes Writing",
-    "GPT — Doubt Clearing",
-    "Practice — Questions / PYQs"
-  ]
-
-};
-
-
-/* =========================================================
-   STORAGE HELPERS
-========================================================= */
-
-function getCurrentKey(subject) {
-  return `${subject}_current_topic`;
+function emptyProgress(){return {learn:false,code:false,review:false,note:""}}
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORE_KEY);
+    if(!raw) return {days:{}};
+    const parsed = JSON.parse(raw);
+    if(!parsed || typeof parsed !== "object" || !parsed.days) return {days:{}};
+    return parsed;
+  }catch(e){return {days:{}}}
 }
-
-
-function getHistoryKey(subject) {
-  return `${subject}_completed_topics`;
+function saveState(){try{localStorage.setItem(STORE_KEY,JSON.stringify(state));updateSidebarProgress()}catch(e){showToast("Browser couldn't save progress. Export a backup before closing.")}}
+function pFor(id){if(!state.days[id])state.days[id]=emptyProgress();return state.days[id]}
+function isDone(id){const p=pFor(id);return !!(p.learn&&p.code&&p.review)}
+function isStarted(id){const p=pFor(id);return !!(p.learn||p.code||p.review||p.note)}
+function doneCount(){return DAYS.filter(d=>isDone(d.day)).length}
+function percent(){return Math.round(doneCount()/DAYS.length*100)}
+function todayISO(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
+function chooseInitialDay(){
+  const today = todayISO();
+  const todays = DAYS.find(d=>d.date===today);
+  if(todays)return todays.day;
+  const future = DAYS.find(d=>d.date>today);
+  if(future)return future.day;
+  const incomplete = DAYS.find(d=>!isDone(d.day));
+  return incomplete ? incomplete.day : DAYS[DAYS.length-1].day;
 }
-
-
-function loadCurrent(subject) {
-
-  try {
-
-    return JSON.parse(
-      localStorage.getItem(
-        getCurrentKey(subject)
-      )
-    ) || null;
-
-  } catch (error) {
-
-    console.error(
-      "Current topic load error:",
-      error
-    );
-
-    return null;
-
+function focusCandidate(){
+  const today = todayISO();
+  const todays = DAYS.find(d=>d.date===today);
+  if(todays && !isDone(todays.day))return todays;
+  const incomplete = DAYS.find(d=>d.date>=today&&!isDone(d.day));
+  if(incomplete)return incomplete;
+  const any = DAYS.find(d=>!isDone(d.day));
+  return any || DAYS[DAYS.length-1];
+}
+function getDay(id){return DAYS.find(d=>d.day===Number(id))||DAYS[0]}
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function dateParts(iso){
+  const [y,m,d]=iso.split("-").map(Number);
+  const date=new Date(y,m-1,d,12);
+  return {day:d,month:MONTHS[m-1],weekday:date.toLocaleDateString("en-IN",{weekday:"short"}),full:date.toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"})}
+}
+function shortDate(iso){const p=dateParts(iso);return `${p.day} ${p.month}`}
+function statusOf(id){return isDone(id)?"done":(isStarted(id)?"progress":"not")}
+function statusLabel(id){return statusOf(id)==="done"?"Completed":statusOf(id)==="progress"?"In progress":"Not started"}
+function progressInDay(id){const p=pFor(id);return [p.learn,p.code,p.review].filter(Boolean).length}
+function firstLine(str){return String(str||"").split(/[\n;]/)[0].replace(/^[•\-\s]+/,"").trim()}
+function taskTitle(d){
+  const content=firstLine(d.learn);
+  return content.length>94 ? content.slice(0,91)+"…" : content || d.phase;
+}
+function ytUrl(d){return "https://www.youtube.com/results?search_query="+encodeURIComponent("Striver A2Z DSA "+d.learn)}
+function setPage(page){
+  activePage=page;
+  document.querySelectorAll(".page").forEach(el=>el.classList.toggle("active",el.id==="page-"+page));
+  document.querySelectorAll("[data-page]").forEach(el=>el.classList.toggle("active",el.classList.contains("nav-btn")&&el.dataset.page===page));
+  const names={overview:"Overview",focus:"Focus day","plan":"All 78 days",reviews:"Weekly review"};
+  document.getElementById("crumbTitle").textContent=names[page]||"DSA Sprint";
+  renderPage(page);
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function selectDay(id){selectedDay=Number(id);setPage("focus")}
+function openSelectedDay(){selectedDay=focusCandidate().day;setPage("focus")}
+function updateSidebarProgress(){
+  const n=doneCount(), pct=Math.round(n/DAYS.length*100);
+  document.getElementById("sidePercent").textContent=pct+"%";
+  document.getElementById("sideMeter").style.width=pct+"%";
+  document.getElementById("sideDone").textContent=`${n} of ${DAYS.length} days complete`;
+}
+function renderStats(){
+  const n=doneCount(), pct=Math.round(n/DAYS.length*100);
+  const now=todayISO(), end=DAYS[DAYS.length-1].date;
+  const today=new Date(now+"T12:00:00"), endDate=new Date(end+"T12:00:00");
+  const remaining=Math.max(0,Math.ceil((endDate-today)/86400000));
+  document.getElementById("statDone").innerHTML=`${n}<span style="font-size:14px;color:#94a3b8;font-weight:650"> / ${DAYS.length}</span>`;
+  document.getElementById("statPercent").textContent=pct+"%";
+  document.getElementById("statRemaining").textContent=String(remaining);
+  document.getElementById("todayChip").textContent=new Date().toLocaleDateString("en-IN",{weekday:"short",day:"numeric",month:"short"});
+  updateSidebarProgress();
+}
+function checkRow(d,key,title,sub){
+  const checked=!!pFor(d.day)[key];
+  return `<label class="check-row ${checked?"checked":""}">
+    <input class="check-input" type="checkbox" data-check-day="${d.day}" data-check-key="${key}" ${checked?"checked":""}>
+    <span class="check-copy"><strong>${esc(title)}</strong><span>${esc(sub)}</span></span>
+  </label>`;
+}
+function focusCardMarkup(d,large=false){
+  const p=pFor(d.day), dp=dateParts(d.date), done=isDone(d.day);
+  return `<div class="${large?"":"focus-preview"}">
+    <div class="card-header">
+      <div><span class="tag">${esc(d.phase)}</span><div class="focus-title">${esc(taskTitle(d))}</div>
+        <div class="focus-meta"><span>📅 ${esc(dp.full)}</span><span>·</span><span>Day ${d.day} of ${DAYS.length}</span><span>·</span><span>◷ ${d.hours}h target</span></div>
+      </div><div class="day-number">${String(d.day).padStart(2,"0")}</div>
+    </div>
+    <div class="info-grid">
+      <div class="info-box"><div class="info-label">Video / learning</div><div class="info-text">${esc(d.learn)}</div><div style="margin-top:12px"><a class="btn btn-outline small-btn" href="${esc(ytUrl(d))}" target="_blank" rel="noopener noreferrer">▶ Find lecture on YouTube</a></div></div>
+      <div class="info-box"><div class="info-label">Coding deliverable</div><div class="info-text">${esc(d.coding)}</div></div>
+    </div>
+    <div class="checklist">
+      ${checkRow(d,"learn","Learning done","Watch the assigned lesson actively; pause and dry-run examples.")}
+      ${checkRow(d,"code","Coding attempted","Write the solution yourself before looking at code; test edge cases.")}
+      ${checkRow(d,"review","Revision + error log","Record complexity, one mistake, or what you'll revisit.")}
+    </div>
+    <div class="focus-actions">
+      ${done?`<span class="tag">✓ DAY COMPLETED</span><button class="btn btn-outline small-btn" data-action="reopen" data-day="${d.day}">Reopen day</button>`:`<button class="btn btn-primary" data-action="complete" data-day="${d.day}">Mark all done ✓</button>`}
+      <button class="btn btn-outline small-btn" data-action="youtube" data-day="${d.day}">Search on YouTube ↗</button>
+    </div>
+    ${large?`<div class="section-head" style="margin-top:24px;margin-bottom:10px"><div><h2 style="font-size:14px">Your notes for this day</h2><p>Save a stuck point, a pattern, or a mistake to revisit.</p></div></div>
+      <textarea class="note-area" data-note-day="${d.day}" placeholder="Example: I get the idea, but my boundary condition fails when…">${esc(p.note||"")}</textarea>
+      <div class="note-hint">Auto-saves in this browser as you type. For a backup, use “Export backup” in the sidebar.</div>
+      <div class="focus-nav"><button class="btn btn-outline small-btn" data-action="prev" data-day="${d.day}" ${d.day===1?"disabled":""}>← Previous day</button><span class="text-sm muted">${progressInDay(d.day)}/3 checkpoints</span><button class="btn btn-outline small-btn" data-action="next" data-day="${d.day}" ${d.day===DAYS.length?"disabled":""}>Next day →</button></div>`:""}
+  </div>`;
+}
+function renderOverview(){
+  renderStats();
+  const d=focusCandidate();
+  document.getElementById("overviewFocus").innerHTML=focusCardMarkup(d,false)+`<div style="margin-top:15px"><button class="btn btn-primary" data-open-day="${d.day}">Open this day's checklist →</button></div>`;
+  const idx=DAYS.findIndex(x=>x.day===d.day);
+  let upcoming=DAYS.slice(idx,idx+4);
+  if(upcoming.length<4)upcoming=DAYS.slice(Math.max(0,DAYS.length-4));
+  document.getElementById("upcomingList").innerHTML=upcoming.map(day=>{
+    const p=dateParts(day.date), done=isDone(day.day);
+    return `<div class="quick-row"><div class="quick-date">${p.day}<br>${p.month.toUpperCase()}</div><div class="quick-copy"><strong>${esc(day.phase)}</strong><span>${esc(taskTitle(day))}</span></div><button class="mini-status ${done?"done":""}" data-open-day="${day.day}">${done?"✓ Done":"Open"}</button></div>`;
+  }).join("");
+  document.getElementById("phaseList").innerHTML=phases.map(phase=>{
+    const group=DAYS.filter(x=>x.phase===phase), complete=group.filter(x=>isDone(x.day)).length, pct=Math.round(complete/group.length*100);
+    return `<div class="phase-card"><div class="phase-top"><div><div class="phase-name">${esc(phase)}</div><div class="phase-meta">${group.length} day${group.length===1?"":"s"} planned</div></div><div class="phase-count">${complete}/${group.length}</div></div><div class="meter"><div class="meter-fill" style="width:${pct}%"></div></div></div>`;
+  }).join("");
+}
+function renderFocus(){
+  const d=getDay(selectedDay);
+  document.getElementById("focusPageTitle").textContent=`Day ${d.day}: ${d.phase}`;
+  document.getElementById("focusPageSub").textContent=`${dateParts(d.date).full} · target ${d.hours} focused hours · ${statusLabel(d.day)}`;
+  document.getElementById("focusPageStatus").textContent=statusLabel(d.day).toUpperCase();
+  document.getElementById("focusPageStatus").className="tag "+(isDone(d.day)?"":"blue");
+  document.getElementById("focusDetail").innerHTML=`<div class="card card-pad">${focusCardMarkup(d,true)}</div>`;
+}
+function renderPlan(){
+  const filtered=DAYS.filter(d=>{
+    const text=[d.phase,d.learn,d.coding,d.review,`day ${d.day}`].join(" ").toLowerCase();
+    if(searchValue&&!text.includes(searchValue.toLowerCase()))return false;
+    if(phaseValue&&d.phase!==phaseValue)return false;
+    if(statusValue&&statusOf(d.day)!==statusValue)return false;
+    return true;
+  });
+  document.getElementById("planCount").textContent=`Showing ${filtered.length} of ${DAYS.length} days`;
+  document.getElementById("dayGrid").innerHTML=filtered.length?filtered.map(d=>{
+    const date=dateParts(d.date), n=progressInDay(d.day), done=isDone(d.day);
+    return `<article class="day-card">
+      <div class="day-card-top"><div class="date-block"><div class="date-square"><b>${date.day}</b><small>${date.month}</small></div><div><div style="font-size:11px;color:var(--muted)">${esc(d.weekday)} · Day ${d.day}</div><div style="margin-top:4px"><span class="tag ${done?"":"blue"}">${esc(d.phase)}</span></div></div></div><span class="pill">${done?"✓ Done":n+"/3"}</span></div>
+      <div class="day-card-title">${esc(taskTitle(d))}</div>
+      <div class="day-card-desc">${esc(d.learn)}<br><b style="color:#52627a">Code:</b> ${esc(d.coding)}</div>
+      <div class="mini-meter"><span style="width:${n/3*100}%"></span></div>
+      <div class="day-card-bottom"><span class="text-sm muted">◷ ${d.hours}h target</span><button class="btn btn-outline small-btn" data-open-day="${d.day}">Open day →</button></div>
+    </article>`;
+  }).join(""):`<div class="empty-state" style="grid-column:1/-1">No task matches these filters. Try a different topic or phase.</div>`;
+}
+function getWeeks(){
+  const weeks=[];
+  for(let i=0;i<DAYS.length;i+=7){
+    const group=DAYS.slice(i,i+7);
+    const checkpoints=group.filter(d=>d.review.trim()).map(d=>({day:d.day,text:d.review}));
+    weeks.push({num:weeks.length+1,days:group,checkpoints});
   }
-
+  return weeks;
 }
-
-
-function saveCurrent(subject, data) {
-
-  localStorage.setItem(
-    getCurrentKey(subject),
-    JSON.stringify(data)
-  );
-
+function renderReviews(){
+  document.getElementById("reviewGrid").innerHTML=getWeeks().map(w=>{
+    const complete=w.days.filter(d=>isDone(d.day)).length;
+    const first=dateParts(w.days[0].date),last=dateParts(w.days[w.days.length-1].date);
+    const checkpoints=w.checkpoints.length?w.checkpoints.map(c=>`Day ${c.day}: ${c.text}`).join("\n"):"No fixed checkpoint in the source plan. Use this week to re-solve the hardest problem without notes.";
+    return `<div class="card review-card"><div class="review-top"><div><div class="review-week">Week ${String(w.num).padStart(2,"0")}</div><div class="review-dates">${first.day} ${first.month} – ${last.day} ${last.month}</div></div><span class="tag ${complete===w.days.length?"":"blue"}">${complete}/${w.days.length} done</span></div><div class="week-dots">${w.days.map(d=>`<span class="week-dot ${isDone(d.day)?"done":""}" title="Day ${d.day}: ${statusLabel(d.day)}"></span>`).join("")}</div><div class="text-sm muted">${Math.round(complete/w.days.length*100)}% of this week completed</div><div class="review-checkpoint">${esc(checkpoints)}</div><div style="margin-top:14px;display:flex;justify-content:space-between;align-items:center;gap:10px"><span class="text-sm muted">${w.days.length} planned days</span><button class="btn btn-outline small-btn" data-open-day="${w.days[0].day}">Open week start →</button></div></div>`;
+  }).join("");
 }
-
-
-function clearCurrent(subject) {
-
-  localStorage.removeItem(
-    getCurrentKey(subject)
-  );
-
+function renderPage(page){
+  if(page==="overview")renderOverview();
+  if(page==="focus")renderFocus();
+  if(page==="plan")renderPlan();
+  if(page==="reviews")renderReviews();
+  renderStats();
 }
-
-
-function loadHistory(subject) {
-
-  try {
-
-    return JSON.parse(
-      localStorage.getItem(
-        getHistoryKey(subject)
-      )
-    ) || [];
-
-  } catch (error) {
-
-    console.error(
-      "History load error:",
-      error
-    );
-
-    return [];
-
+function showToast(msg){
+  const el=document.getElementById("toast");el.textContent=msg;el.classList.add("show");
+  clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove("show"),2600);
+}
+function toggleCheck(day,key,val){
+  pFor(day)[key]=val;saveState();renderPage(activePage);
+  showToast(val?"Checkpoint saved ✓":"Checkpoint unchecked");
+}
+function finishDay(day){
+  const p=pFor(day);p.learn=true;p.code=true;p.review=true;saveState();renderPage(activePage);showToast("Day marked complete. Nice—next task awaits.");
+}
+function reopenDay(day){
+  const p=pFor(day);p.learn=false;p.code=false;p.review=false;saveState();renderPage(activePage);showToast("Day reopened");
+}
+function downloadBackup(){
+  const payload={app:"DSA Sprint Tracker",version:1,exportedAt:new Date().toISOString(),days:state.days};
+  const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="dsa-sprint-backup.json";a.click();URL.revokeObjectURL(url);
+  showToast("Progress backup exported");
+}
+function importBackup(file){
+  const reader=new FileReader();
+  reader.onload=()=>{
+    try{
+      const data=JSON.parse(reader.result);
+      if(!data||!data.days||typeof data.days!=="object")throw new Error("Invalid");
+      state={days:data.days};saveState();renderPage(activePage);showToast("Backup imported successfully");
+    }catch(e){showToast("Couldn't read this backup file.")}
+  };
+  reader.readAsText(file);
+}
+function initFilters(){
+  const sel=document.getElementById("phaseFilter");
+  sel.innerHTML='<option value="">All phases</option>'+phases.map(p=>`<option value="${esc(p)}">${esc(p)}</option>`).join("");
+}
+document.addEventListener("click",e=>{
+  const nav=e.target.closest("[data-page]");
+  if(nav){setPage(nav.dataset.page);return}
+  const open=e.target.closest("[data-open-day]");
+  if(open){selectDay(open.dataset.openDay);return}
+  const act=e.target.closest("[data-action]");
+  if(act){
+    const day=Number(act.dataset.day);
+    if(act.dataset.action==="complete")finishDay(day);
+    else if(act.dataset.action==="reopen")reopenDay(day);
+    else if(act.dataset.action==="youtube")window.open(ytUrl(getDay(day)),"_blank","noopener,noreferrer");
+    else if(act.dataset.action==="prev"){selectedDay=Math.max(1,day-1);renderPage("focus")}
+    else if(act.dataset.action==="next"){selectedDay=Math.min(DAYS.length,day+1);renderPage("focus")}
   }
-
-}
-
-
-function saveHistory(subject, history) {
-
-  localStorage.setItem(
-    getHistoryKey(subject),
-    JSON.stringify(history)
-  );
-
-}
-
-
-/* =========================================================
-   ESCAPE HTML
-========================================================= */
-
-function escapeHtml(text) {
-
-  return text.replace(
-    /[&<>"']/g,
-
-    function(char) {
-
-      const entities = {
-
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#039;"
-
-      };
-
-      return entities[char];
-
-    }
-  );
-
-}
-
-
-/* =========================================================
-   CREATE TRACKER
-========================================================= */
-
-function createTracker(subject) {
-
-  const input =
-    document.getElementById(
-      `${subject}Chapter`
-    );
-
-  const startBtn =
-    document.getElementById(
-      `${subject}StartBtn`
-    );
-
-  const tracker =
-    document.getElementById(
-      `${subject}Tracker`
-    );
-
-  const title =
-    document.getElementById(
-      `${subject}Title`
-    );
-
-  const newBtn =
-    document.getElementById(
-      `${subject}NewBtn`
-    );
-
-  const checks =
-    document.getElementById(
-      `${subject}Checks`
-    );
-
-  const count =
-    document.getElementById(
-      `${subject}Count`
-    );
-
-  const fill =
-    document.getElementById(
-      `${subject}Fill`
-    );
-
-  const complete =
-    document.getElementById(
-      `${subject}Complete`
-    );
-
-  const historyList =
-    document.getElementById(
-      `${subject}History`
-    );
-
-
-  /* =======================================================
-     RENDER HISTORY
-  ======================================================= */
-
-  function renderHistory() {
-
-    const history =
-      loadHistory(subject);
-
-
-    if (!history.length) {
-
-      historyList.innerHTML =
-        `<div class="small">
-          Abhi kuch complete nahi hua.
-        </div>`;
-
-      return;
-
-    }
-
-
-    historyList.innerHTML =
-      history
-        .slice()
-        .reverse()
-        .map(item => {
-
-          return `
-            <div class="history-item">
-
-              <span class="history-topic">
-                ${escapeHtml(item.chapter)}
-              </span>
-
-              <span class="history-date">
-                ${escapeHtml(item.date)}
-              </span>
-
-            </div>
-          `;
-
-        })
-        .join("");
-
+});
+document.addEventListener("change",e=>{
+  if(e.target.matches("[data-check-day]"))toggleCheck(Number(e.target.dataset.checkDay),e.target.dataset.checkKey,e.target.checked);
+  if(e.target.id==="phaseFilter"){phaseValue=e.target.value;renderPlan()}
+  if(e.target.id==="statusFilter"){statusValue=e.target.value;renderPlan()}
+  if(e.target.id==="importFile"&&e.target.files&&e.target.files[0]){importBackup(e.target.files[0]);e.target.value=""}
+});
+document.addEventListener("input",e=>{
+  if(e.target.id==="searchInput"){searchValue=e.target.value;renderPlan()}
+  if(e.target.matches("[data-note-day]")){
+    pFor(Number(e.target.dataset.noteDay)).note=e.target.value;saveState();
   }
-
-
-  /* =======================================================
-     RENDER CURRENT TOPIC
-  ======================================================= */
-
-  function renderCurrent() {
-
-    const data =
-      loadCurrent(subject);
-
-
-    if (!data) {
-
-      tracker.classList.add(
-        "hidden"
-      );
-
-      return;
-
-    }
-
-
-    tracker.classList.remove(
-      "hidden"
-    );
-
-
-    title.textContent =
-      data.chapter;
-
-
-    checks.innerHTML =
-      workflows[subject]
-        .map((step, index) => {
-
-          const checked =
-            Boolean(
-              data.checked[index]
-            );
-
-          return `
-            <label
-              class="check ${checked ? "done" : ""}"
-              id="${subject}Row${index}"
-            >
-
-              <input
-                type="checkbox"
-                data-index="${index}"
-                ${checked ? "checked" : ""}
-              >
-
-              <span>
-                ${index + 1}. ${step}
-              </span>
-
-            </label>
-          `;
-
-        })
-        .join("");
-
-
-    checks
-      .querySelectorAll("input")
-      .forEach(box => {
-
-        box.addEventListener(
-          "change",
-          updateProgress
-        );
-
-      });
-
-
-    updateProgress(false);
-
+});
+document.getElementById("continueBtn").addEventListener("click",openSelectedDay);
+document.getElementById("exportBtn").addEventListener("click",downloadBackup);
+document.getElementById("importBtn").addEventListener("click",()=>document.getElementById("importFile").click());
+document.getElementById("resetBtn").addEventListener("click",()=>{
+  if(confirm("Reset all saved DSA progress and notes on this browser? This cannot be undone unless you exported a backup.")){
+    state={days:{}};saveState();selectedDay=chooseInitialDay();renderPage(activePage);showToast("Progress reset");
   }
-
-
-  /* =======================================================
-     UPDATE PROGRESS
-  ======================================================= */
-
-  function updateProgress(save = true) {
-
-    const data =
-      loadCurrent(subject);
-
-
-    if (!data)
-      return;
-
-
-    const boxes = [
-      ...checks.querySelectorAll(
-        "input"
-      )
-    ];
-
-
-    data.checked =
-      boxes.map(
-        box => box.checked
-      );
-
-
-    const completedCount =
-      data.checked.filter(
-        Boolean
-      ).length;
-
-
-    count.textContent =
-      `${completedCount}/5`;
-
-
-    fill.style.width =
-      `${completedCount * 20}%`;
-
-
-    boxes.forEach(
-      (box, index) => {
-
-        const row =
-          document.getElementById(
-            `${subject}Row${index}`
-          );
-
-        if (row) {
-
-          row.classList.toggle(
-            "done",
-            box.checked
-          );
-
-        }
-
-      }
-    );
-
-
-    /* SAVE PROGRESS */
-    if (save) {
-
-      saveCurrent(
-        subject,
-        data
-      );
-
-    }
-
-
-    /* =====================================================
-       COMPLETION
-    ===================================================== */
-
-    if (completedCount === 5) {
-
-      newBtn.disabled = false;
-
-      complete.classList.remove(
-        "hidden"
-      );
-
-
-      let history =
-        loadHistory(subject);
-
-
-      const alreadyExists =
-        history.some(
-          item =>
-            item.chapter ===
-            data.chapter
-        );
-
-
-      if (!alreadyExists) {
-
-        history.push({
-
-          chapter:
-            data.chapter,
-
-          date:
-            new Date()
-              .toLocaleDateString(
-                "en-IN"
-              )
-
-        });
-
-
-        saveHistory(
-          subject,
-          history
-        );
-
-
-        renderHistory();
-
-      }
-
-    } else {
-
-      newBtn.disabled = true;
-
-      complete.classList.add(
-        "hidden"
-      );
-
-    }
-
-  }
-
-
-  /* =======================================================
-     START TOPIC
-  ======================================================= */
-
-  function startTopic() {
-
-    const chapter =
-      input.value.trim();
-
-
-    if (!chapter) {
-
-      alert(
-        "Chapter / Lecture name bharo."
-      );
-
-      input.focus();
-
-      return;
-
-    }
-
-
-    const data = {
-
-      chapter: chapter,
-
-      checked:
-        Array(5).fill(false)
-
-    };
-
-
-    saveCurrent(
-      subject,
-      data
-    );
-
-
-    renderCurrent();
-
-    input.value = "";
-
-  }
-
-
-  /* =======================================================
-     NEW TOPIC
-  ======================================================= */
-
-  function newTopic() {
-
-    clearCurrent(
-      subject
-    );
-
-
-    tracker.classList.add(
-      "hidden"
-    );
-
-
-    input.value = "";
-
-    input.focus();
-
-  }
-
-
-  /* =======================================================
-     EVENTS
-  ======================================================= */
-
-  startBtn.addEventListener(
-    "click",
-    startTopic
-  );
-
-
-  input.addEventListener(
-    "keydown",
-    function(event) {
-
-      if (event.key === "Enter") {
-
-        startTopic();
-
-      }
-
-    }
-  );
-
-
-  newBtn.addEventListener(
-    "click",
-    newTopic
-  );
-
-
-  /* =======================================================
-     INITIAL LOAD
-  ======================================================= */
-
-  renderHistory();
-
-  renderCurrent();
-
-}
-
-
-/* =========================================================
-   INITIALIZE IN ORDER:
-   DS → DM → DE
-========================================================= */
-
-createTracker("ds");
-
-createTracker("dm");
-
-createTracker("de");
-
+});
+initFilters();selectedDay=focusCandidate().day;renderPage("overview");
 </script>
-
 </body>
 </html>
-```
